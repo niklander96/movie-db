@@ -12,6 +12,8 @@ export default class MovieList extends Component {
 					<Movie />
 				</li>
 			</ul>
+
+
 		)
 	}
 }

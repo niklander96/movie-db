@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-
 import Header from '../Header'
 import MovieList from "../MovieList";
 
@@ -17,17 +16,22 @@ export default class App extends Component {
 	createMovItem() {
 
 	}
+
 	render() {
 		return (
+
 			<section className="movie-app">
 				<header className="header">
-					<Header />
+					<Header/>
 				</header>
 				<section className="main">
-					<MovieList />
+					<MovieList/>
 				</section>
 			</section>
-		)
+
+
+
+	)
 
 	}
 }

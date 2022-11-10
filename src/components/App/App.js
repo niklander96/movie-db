@@ -1,37 +1,26 @@
-import React, {Component} from "react";
-import Header from '../Header'
-import MovieList from "../MovieList";
+import React, { Component } from 'react'
 
-import './App.css';
+// import Header from '../Header'
+import MovieList from '../MovieList'
+
+import './App.css'
 
 export default class App extends Component {
+  maxId = 0
 
-	maxId = 0
+  state = {
+    movies: [],
+  }
 
-	state = {
-		movies: [],
+  createMovItem() {}
 
-	}
-
-	createMovItem() {
-
-	}
-
-	render() {
-		return (
-
-			<section className="movie-app">
-				<header className="header">
-					<Header/>
-				</header>
-				<section className="main">
-					<MovieList/>
-				</section>
-			</section>
-
-
-
-	)
-
-	}
+  render() {
+    return (
+      <section className='movie-app'>
+        <section className='main'>
+          <MovieList />
+        </section>
+      </section>
+    )
+  }
 }

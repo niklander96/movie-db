@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+@font-face {
+  font-family: 'Inter';
+}
 html,
 body {
   margin: 0;
@@ -5,9 +10,9 @@ body {
 }
 
 body {
-  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font: 14px 'Inter', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
-  background: #FF1122;
+  background: #E5E5E5;
   color: #111111;
   width: 1010px;
   height: 1147px;

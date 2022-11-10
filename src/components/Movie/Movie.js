@@ -1,21 +1,29 @@
-import React, {Component} from "react";
+import React, { Component } from 'react'
+
 // import MovieDetails from "../MovieDetails";
+// import Stars from './Stars/Stars'
 import './Movie.css'
 
-
 export default class Movie extends Component {
-	render() {
-		return (
-		<div className="movie-card">
-			<h1 className="movie-head">Movie name</h1>
-				<span className="movie-date-exit">02/11/22</span>
-				<ul className="movie-genres">
-					<li className="movie-genre">Action</li>
-					<li className="movie-genre">Drama</li>
-				</ul>
-				<p className="movie-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam dolorem dolores illum nesciunt quia. Consequatur eos omnis quas similique sint.</p>
-		</div>
-
-	)
-	}
+  render() {
+    const { title, overview, releaseDate, voteAverage, posterPath } = this.props
+    console.log(posterPath)
+    return (
+      <div className='view'>
+        <div>
+          <img src={`${posterPath}`} alt='movie' />
+        </div>
+        <div className='description'>
+          <h1 className='movie-head'>{`${title}`}</h1>
+          <span className='movie-date-exit'>{`${releaseDate}`}</span>
+          <span className='rating'>{`${voteAverage}`}</span>
+          <div className='movie-genres'>
+            <div className='movie-genre'>Action</div>
+            <div className='movie-genre'>Drama</div>
+          </div>
+          <p className='movie-description'>{`${overview}`}</p>
+        </div>
+      </div>
+    )
+  }
 }

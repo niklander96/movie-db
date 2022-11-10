@@ -1,3 +1,3 @@
-import MovieDetails from "./MovieDetails";
+import MovieDetails from './MovieDetails'
 
-export default MovieDetails;
+export default MovieDetails

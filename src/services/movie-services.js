@@ -13,16 +13,4 @@ export default class MovieService {
     )
     return res.results
   }
-
-  // getMovie(id) {
-  //   return this.getResource(
-  //     'search/movie?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&query=return&page=1&id=43641',
-  //   )
-  // }
 }
-
-// const movieApi = new MovieService()
-//
-// movieApi.getAllMovies().then((movie) => {
-//   movie.forEach((p) => {})
-// })

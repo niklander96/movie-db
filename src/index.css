@@ -5,19 +5,17 @@
 }
 html,
 body {
-  margin: 0;
+
+margin: auto;
   padding: 0;
 }
 
 body {
-  font: 14px 'Inter', Helvetica, Arial, sans-serif;
+  font: 14px Inter sans-serif;
   line-height: 1.4em;
   background: #E5E5E5;
   color: #111111;
-  width: 1010px;
+  width: auto;
   height: 1147px;
   margin: 0 auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 300;
 }

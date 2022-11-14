@@ -1,6 +1,7 @@
 @import '~antd/dist/antd.css';
 
-.spinner {
-    margin-left: 50%;
-    margin-top: 50%;
+.ant-spin {
+    margin: auto;
+    width: 100px;
+    height: 100px;
 }

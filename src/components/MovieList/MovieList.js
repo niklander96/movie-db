@@ -14,7 +14,7 @@ export default class MovieList extends Component {
     super()
     this.state = {
       moviesArr: [],
-      loading: false,
+      loading: true,
       error: false,
       network: true,
     }
@@ -24,15 +24,10 @@ export default class MovieList extends Component {
     this.updateMovie()
   }
 
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //
-  // }
-
   onError = () => {
     this.setState({
       error: true,
-      loading: true,
-      network: false,
+      loading: false
     })
   }
 
@@ -58,16 +53,14 @@ export default class MovieList extends Component {
   }
 
   render() {
-    const { loading, error, network } = this.state
+    const { loading, error } = this.state
     if (loading) {
       return <Spinner />
     }
     if (error) {
       return <Error />
     }
-    // if (network) {
-    //   return <NetworkDetector />
-    // }
+
 
     const elMov = this.state.moviesArr.map((el) => {
       const { title, id, overview, releaseDate, posterPath } = el

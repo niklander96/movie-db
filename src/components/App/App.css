@@ -1,4 +1,7 @@
 .movie-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0 auto;
     width: 75%;
     height: auto;

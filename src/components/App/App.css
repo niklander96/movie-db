@@ -1,5 +1,12 @@
 .movie-app {
-    width: 1010px;
+    margin: 0 auto;
+    width: 75%;
     height: auto;
     background: #FFFFFF;
 }
+
+.button {
+    border: none;
+}
+
+

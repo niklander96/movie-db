@@ -1,0 +1,24 @@
+.app-header {
+    margin: 13px auto 14px auto;
+    width: 940px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    border: none;
+    margin: 13px auto 19px auto;
+}
+
+.ant-btn {
+    font-family: 'Inter';
+    margin: 19px 0 10px 0;
+    height: 52px;
+}
+
+.app-search-field .ant-input {
+    width: 938px;
+    height: 40px;
+}
+
+

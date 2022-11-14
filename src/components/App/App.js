@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 
-// import Header from '../Header'
+import Header from '../Header'
 import MovieList from '../MovieList'
 import Pagi from '../Pagination/Pagination'
+import SearchField from '../SearchField/SearchField'
+import { Button } from 'antd';
 import './App.css'
 
 export default class App extends Component {
@@ -16,12 +18,16 @@ export default class App extends Component {
 
   render() {
     return (
-      <section className='movie-app'>
-        <section className='main'>
+      <div className='movie-app'>
+        <Header />
+
+        <div className='main'>
           <MovieList />
-        </section>
-        {/*<Pagi />*/}
-      </section>
+        </div>
+        <Pagi
+        className="app-pagination"
+        />
+      </div>
     )
   }
 }

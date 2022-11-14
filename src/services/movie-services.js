@@ -7,9 +7,10 @@ export default class MovieService {
     }
     return await res.json()
   }
+
   async getAllMovies() {
     const res = await this.getResource(
-      'search/movie?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&query=return&page=1&include_adult=false',
+      'search/movie?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&query=return&page=1',
     )
     return res.results
   }

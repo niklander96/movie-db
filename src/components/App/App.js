@@ -7,7 +7,6 @@ import Pagi from '../Pagination/Pagination'
 import './App.css'
 
 export default class App extends Component {
-
   state = {
     movies: [],
   }
@@ -21,9 +20,7 @@ export default class App extends Component {
         <div className='main'>
           <MovieList />
         </div>
-        <Pagi
-        className="app-pagination"
-        />
+        <Pagi className='app-pagination' />
       </div>
     )
   }

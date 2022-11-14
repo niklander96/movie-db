@@ -5,7 +5,6 @@ import './MovieList.css'
 import MovieService from '../../services/movie-services'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
-// import NetworkDetector from '../NetworkDetector'
 
 export default class MovieList extends Component {
   movieService = new MovieService()
@@ -27,7 +26,7 @@ export default class MovieList extends Component {
   onError = () => {
     this.setState({
       error: true,
-      loading: false
+      loading: false,
     })
   }
 
@@ -42,6 +41,7 @@ export default class MovieList extends Component {
             overview: mov.overview,
             releaseDate: mov.release_date,
             posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
+            voteAverage: mov.vote_average,
           }
         })
         this.setState({
@@ -61,9 +61,8 @@ export default class MovieList extends Component {
       return <Error />
     }
 
-
     const elMov = this.state.moviesArr.map((el) => {
-      const { title, id, overview, releaseDate, posterPath } = el
+      const { title, id, overview, releaseDate, posterPath, voteAverage } = el
 
       return (
         <div className='movie-card' key={id}>
@@ -74,6 +73,7 @@ export default class MovieList extends Component {
             overview={overview}
             releaseDate={releaseDate}
             posterPath={posterPath}
+            voteAverage={voteAverage}
             loading={loading}
           />
         </div>

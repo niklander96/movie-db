@@ -1,9 +1,21 @@
-h1 {
-    font-size: 20px;
+@import '~antd/dist/antd.css';
+
+.movie-title {
+    display: flex;
+    flex-direction: row;
 }
 
+h1 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+}
 .movie-card {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     width: 454px;
     height: 281px;
     background: #FFFFFF;
@@ -28,8 +40,9 @@ img {
 }
 
 .description {
-    width: 228px;
-    margin-left: 200px;
+    box-sizing: border-box;
+    width: 271px;
+    margin-left: 190px;
 }
 
 .movie-genre {
@@ -46,3 +59,13 @@ img {
     border-radius: 2px;
     margin-right: 8px;
 }
+
+.ant-rate {
+    width: 271px;
+}
+
+.ant-progress-circle-path {
+    display: flex;
+    flex-direction: row;
+    margin: 12px 9px auto auto;
+   }

@@ -1,7 +1,0 @@
-@import '~antd/dist/antd.css';
-
-.ant-spin {
-    margin: auto;
-    width: 100px;
-    height: 100px;
-}

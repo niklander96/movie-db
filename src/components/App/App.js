@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
+import { Pagination } from 'antd'
 
 import Header from '../Header'
 import MovieList from '../MovieList'
-import Pagi from '../Pagination/Pagination'
 
 import './App.css'
 
@@ -20,7 +20,7 @@ export default class App extends Component {
         <div className='main'>
           <MovieList />
         </div>
-        <Pagi className='app-pagination' />
+        <Pagination className='app-pagination' size='small' total={50} />
       </div>
     )
   }

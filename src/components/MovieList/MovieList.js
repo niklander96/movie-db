@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
+import { Spin } from 'antd'
 
 import Movie from '../Movie'
 import './MovieList.css'
 import MovieService from '../../services/movie-services'
-import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 
 export default class MovieList extends Component {
@@ -55,7 +55,7 @@ export default class MovieList extends Component {
   render() {
     const { loading, error } = this.state
     if (loading) {
-      return <Spinner />
+      return <Spin />
     }
     if (error) {
       return <Error />

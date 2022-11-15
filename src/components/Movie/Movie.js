@@ -8,7 +8,7 @@ import './Movie.css'
 export default class Movie extends Component {
   render() {
     const { title, overview, releaseDate, posterPath, voteAverage } = this.props
-    shave('.movie-description', 100)
+    shave('.movie-description', 105)
 
     return (
       <div className='view'>
@@ -21,17 +21,14 @@ export default class Movie extends Component {
             <Progress
               type='circle'
               width={30}
-              percent={voteAverage}
-              format={(voteAverage) => `${voteAverage}`}
+              percent={100}
+              format={() => `${voteAverage}`}
               strokeColor={{
-                '0%': '#ff0000',
-                '10%': '#87d068',
+                '100%': '#87d068',
               }}
             />
           </div>
-
           <span className='movie-date-exit'>{`${format(new Date(releaseDate), 'MMMM d, yyyy')}`}</span>
-
           <div className='movie-genres'>
             <div className='movie-genre'>Action</div>
             <div className='movie-genre'>Drama</div>

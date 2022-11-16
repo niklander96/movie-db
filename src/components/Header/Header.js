@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { Button, Input } from 'antd'
-import { debounce } from 'lodash'
-import { Spin } from "antd"
 
 import './Header.css'
 import MovieService from '../../services/movie-services'
@@ -11,49 +9,16 @@ export default class Header extends Component {
 
   state = {
     inputValue: '',
-    loading: false,
   }
 
-  handleChange = debounce((inputValue) => {
-    this.movieService.getResource(
-        `https://api.themoviedb.org/3/search/movie?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&query=${inputValue}&page=1`,
-      )
-      .then(res => res.json())
+  onSubmit = (e) => {
+    e.preventDefault()
     this.setState({
-      loading: true
-    })
-
-  },2000)
-
-  // debounceTest = debounce(() => {
-  //   this.setState({
-  //     loading: false,
-  //   })
-  // })
-  //
-  // debounceWork = (e) => {
-  //   const {
-  //     target: { value },
-  //   } = e
-  //   this.setState({
-  //     loading: true,
-  //     inputValue: value,
-  //   })
-  // }
-
-  setValue = (e) => {
-    this.setState({
-      inputValue: e.target.value,
+      inputValue: '',
     })
   }
 
   render() {
-    const { inputValue, loading } = this.state
-    console.log(inputValue)
-    // if (loading) {
-    //   return <Spin />
-    // }
-
     return (
       <div className='app-header'>
         <div className='buttons'>
@@ -64,11 +29,8 @@ export default class Header extends Component {
             Rated
           </Button>
         </div>
-          <Input
-            placeholder='Type to search...'
-            onChange={(e) => this.handleChange(e.target.value)}
-            // value={inputValue}
-          />
+
+        <Input placeholder='Type to search...' onChange={this.props.setValue} />
       </div>
     )
   }

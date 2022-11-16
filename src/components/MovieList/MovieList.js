@@ -1,67 +1,38 @@
 import React, { Component } from 'react'
-import { Spin } from 'antd'
+import { Alert, Spin } from 'antd'
 
 import Movie from '../Movie'
 import './MovieList.css'
-import MovieService from '../../services/movie-services'
-import Error from '../Error/Error'
 
 export default class MovieList extends Component {
-  movieService = new MovieService()
-
-  constructor() {
-    super()
-    this.state = {
-      moviesArr: [],
-      loading: true,
-      error: false,
-      network: true,
-    }
-  }
-
-  componentDidMount() {
-    this.updateMovie()
-  }
-
-  onError = () => {
-    this.setState({
-      error: true,
-      loading: false,
-    })
-  }
-
-  updateMovie() {
-    this.movieService
-      .getAllMovies()
-      .then((movie) => {
-        const arrM = movie.map((mov) => {
-          return {
-            id: mov.id,
-            title: mov.title,
-            overview: mov.overview,
-            releaseDate: mov.release_date,
-            posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
-            voteAverage: mov.vote_average,
-          }
-        })
-        this.setState({
-          moviesArr: arrM,
-          loading: false,
-        })
-      })
-      .catch(this.onError)
-  }
-
   render() {
-    const { loading, error } = this.state
+    const { loading, error, moviesArr } = this.props
     if (loading) {
       return <Spin />
     }
+
     if (error) {
-      return <Error />
+      return (
+        <Alert
+          message='Нет подключения к сети'
+          description='Проверьте настройки сетевого подкючения'
+          type='error'
+          closable
+        />
+      )
     }
 
-    const elMov = this.state.moviesArr.map((el) => {
+    if (moviesArr.length === 0) {
+      return (
+        <Alert
+          message='Поиск не дал результатов'
+          description='Проверьте правильно ли вы ввели название'
+          type='info'
+          closable
+        />
+      )
+    }
+    const elMov = this.props.moviesArr.map((el) => {
       const { title, id, overview, releaseDate, posterPath, voteAverage } = el
 
       return (

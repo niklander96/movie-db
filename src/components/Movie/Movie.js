@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import shave from 'shave'
 import { format } from 'date-fns'
-import { Rate, Progress } from 'antd'
-
+import { Rate, Progress, Typography } from 'antd'
 import './Movie.css'
 
 export default class Movie extends Component {
+  state = {
+    ellipsis: true,
+  }
+
   render() {
     const { title, overview, releaseDate, posterPath, voteAverage } = this.props
-    shave('.movie-description', 105)
-
+    const { ellipsis } = this.state
+    const { Paragraph } = Typography
     return (
       <div className='view'>
         <div className='movie-avatar'>
@@ -33,7 +35,9 @@ export default class Movie extends Component {
             <div className='movie-genre'>Action</div>
             <div className='movie-genre'>Drama</div>
           </div>
-          <p className='movie-description'>{`${overview}`}</p>
+          <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 4 } : false}>
+            {`${overview}`}
+          </Paragraph>
           <Rate allowHalf defaultValue={2.5} count={10} />
         </div>
       </div>

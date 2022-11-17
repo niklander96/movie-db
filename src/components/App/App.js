@@ -6,7 +6,6 @@ import Header from '../Header'
 import MovieList from '../MovieList'
 import './App.css'
 import MovieService from '../../services/movie-services'
-import { number, string } from "prop-types"
 
 export default class App extends Component {
   movieService = new MovieService()
@@ -63,7 +62,6 @@ export default class App extends Component {
       loading: true,
     })
   }, 1000)
-
 
   // setCurrentPage = (number) => {
   //   this.movieService.getMovies(number).then((movie) => {
@@ -126,7 +124,6 @@ export default class App extends Component {
             total={50}
             onChange={(number) => {
               this.updateMovie(number)
-
             }}
           />
         </div>

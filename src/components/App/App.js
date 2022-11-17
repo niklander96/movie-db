@@ -1,28 +1,29 @@
 import React, { Component } from 'react'
-import { Pagination } from 'antd'
+import { Input, Pagination } from 'antd'
 import { debounce } from 'lodash'
 
 import Header from '../Header'
 import MovieList from '../MovieList'
 import './App.css'
 import MovieService from '../../services/movie-services'
+import { number, string } from "prop-types"
 
 export default class App extends Component {
   movieService = new MovieService()
 
   state = {
     moviesArr: [],
+    genres: [],
     loading: true,
     error: false,
     network: true,
-    string: '',
+    currentPage: 1,
   }
 
   componentDidMount() {
-    this.updateMovie('return', 1)
+    this.updateMovie('return', this.state.currentPage)
     this.setState({
       loading: true,
-      string: '',
     })
   }
 
@@ -45,6 +46,7 @@ export default class App extends Component {
             releaseDate: mov.release_date,
             posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
             voteAverage: mov.vote_average,
+            currentPage: mov.page + 1,
           }
         })
         this.setState({
@@ -56,21 +58,56 @@ export default class App extends Component {
   }
 
   setValue = debounce((e) => {
-    this.updateMovie(e.target.value, 1)
+    this.updateMovie(e.target.value, this.state.currentPage)
     this.setState({
       loading: true,
     })
   }, 1000)
 
-  render() {
-    const { moviesArr, loading, id, title, overview, releaseDate, posterPath, voteAverage, error, inputValue } =
-      this.state
 
+  // setCurrentPage = (number) => {
+  //   this.movieService.getMovies(number).then((movie) => {
+  //     this.setState({
+  //
+  //         loading: false,
+  //       })
+  //     console.log(movie.page)
+  //   })
+  // }
+  //
+  // setCurrentPAgeValue = (e) => {
+  //   this.setCurrentPage()
+  // }
+
+  render() {
+    const {
+      moviesArr,
+      loading,
+      id,
+      title,
+      overview,
+      releaseDate,
+      posterPath,
+      voteAverage,
+      error,
+      inputValue,
+      currentPage,
+    } = this.state
+    console.log(currentPage)
     return (
       <div className='movie-app'>
-        <Header inputValue={inputValue} setValue={this.setValue} />
-        <div className='main'>
+        <div className='movie-app-header'>
+          <Header />
+        </div>
+        <div className='movie-app-main'>
+          {!loading ? (
+            <form action=''>
+              <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
+            </form>
+          ) : null}
           <MovieList
+            inputValue={inputValue}
+            setValue={this.setValue}
             moviesArr={moviesArr}
             loading={loading}
             id={id}
@@ -82,7 +119,17 @@ export default class App extends Component {
             error={error}
           />
         </div>
-        <Pagination className='app-pagination' size='small' total={50} />
+        <div className='movie-app-footer'>
+          <Pagination
+            className='app-pagination'
+            size='small'
+            total={50}
+            onChange={(number) => {
+              this.updateMovie(number)
+
+            }}
+          />
+        </div>
       </div>
     )
   }

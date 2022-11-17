@@ -30,7 +30,7 @@ export default class Movie extends Component {
               }}
             />
           </div>
-          <span className='movie-date-exit'>{`${format(new Date(releaseDate), 'MMMM d, yyyy')}`}</span>
+          <span className='movie-date-exit'>{`${format(new Date(releaseDate), 'MMMM dd, yyyy')}`}</span>
           <div className='movie-genres'>
             <div className='movie-genre'>Action</div>
             <div className='movie-genre'>Drama</div>

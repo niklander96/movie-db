@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { Alert, Spin } from 'antd'
+import { Alert, Spin, Typography } from 'antd'
 
 import Movie from '../Movie'
 import './MovieList.css'
 
 export default class MovieList extends Component {
+  state = {
+    ellipsis: true,
+  }
   render() {
+    const { Paragraph } = Typography
     const { loading, error, moviesArr } = this.props
     if (loading) {
       return <Spin />
@@ -46,6 +50,8 @@ export default class MovieList extends Component {
             posterPath={posterPath}
             voteAverage={voteAverage}
             loading={loading}
+            Paragraph={Paragraph}
+            ellipsis={this.state.ellipsis}
           />
         </div>
       )

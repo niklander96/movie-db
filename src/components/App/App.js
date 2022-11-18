@@ -10,20 +10,28 @@ import MovieService from '../../services/movie-services'
 export default class App extends Component {
   movieService = new MovieService()
 
+  page = 1
   state = {
     moviesArr: [],
     genres: [],
     loading: true,
     error: false,
     network: true,
-    currentPage: 1,
+    currentPage: this.page,
+    inputValue: 'return',
   }
 
   componentDidMount() {
-    this.updateMovie('return', this.state.currentPage)
+    this.updateMovie(this.state.inputValue, this.state.currentPage)
     this.setState({
       loading: true,
     })
+  }
+
+  componentDidUpdate(prevState) {
+    if (this.state.currentPage === prevState.currentPage) {
+      this.updateMovie()
+    }
   }
 
   onError = () => {
@@ -45,7 +53,7 @@ export default class App extends Component {
             releaseDate: mov.release_date,
             posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
             voteAverage: mov.vote_average,
-            currentPage: mov.page + 1,
+            currentPage: mov.page,
           }
         })
         this.setState({
@@ -60,38 +68,15 @@ export default class App extends Component {
     this.updateMovie(e.target.value, this.state.currentPage)
     this.setState({
       loading: true,
+      inputValue: e.target.value,
+      currentPage: this.page,
     })
   }, 1000)
 
-  // setCurrentPage = (number) => {
-  //   this.movieService.getMovies(number).then((movie) => {
-  //     this.setState({
-  //
-  //         loading: false,
-  //       })
-  //     console.log(movie.page)
-  //   })
-  // }
-  //
-  // setCurrentPAgeValue = (e) => {
-  //   this.setCurrentPage()
-  // }
-
   render() {
-    const {
-      moviesArr,
-      loading,
-      id,
-      title,
-      overview,
-      releaseDate,
-      posterPath,
-      voteAverage,
-      error,
-      inputValue,
-      currentPage,
-    } = this.state
-    console.log(currentPage)
+    const { moviesArr, loading, id, title, overview, releaseDate, posterPath, voteAverage, error, inputValue } =
+      this.state
+
     return (
       <div className='movie-app'>
         <div className='movie-app-header'>
@@ -99,7 +84,7 @@ export default class App extends Component {
         </div>
         <div className='movie-app-main'>
           {!loading ? (
-            <form action=''>
+            <form>
               <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
             </form>
           ) : null}
@@ -122,9 +107,7 @@ export default class App extends Component {
             className='app-pagination'
             size='small'
             total={50}
-            onChange={(number) => {
-              this.updateMovie(number)
-            }}
+            onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
           />
         </div>
       </div>

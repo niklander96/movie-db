@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from 'antd'
+import { Button, Input } from 'antd'
 
 import './Header.css'
 
@@ -15,6 +15,7 @@ export default class Header extends Component {
             Rated
           </Button>
         </div>
+        <Input placeholder='Type to search...' onChange={(e) => this.props.setValue(e)} autoFocus />
       </div>
     )
   }

@@ -1,25 +1,25 @@
 import React, { Component } from 'react'
-import { Input, Pagination } from 'antd'
+import { Pagination } from 'antd'
 import { debounce } from 'lodash'
 
 import Header from '../Header'
 import MovieList from '../MovieList'
 import './App.css'
 import MovieService from '../../services/movie-services'
+import { MovieServiceProvider } from '../MovieServiceContext'
 
 export default class App extends Component {
-  movieService = new MovieService()
-
   page = 1
   state = {
     moviesArr: [],
     genres: [],
     loading: true,
     error: false,
-    network: true,
     currentPage: this.page,
     inputValue: 'return',
   }
+
+  movieService = new MovieService()
 
   componentDidMount() {
     this.updateMovie(this.state.inputValue, this.state.currentPage)
@@ -78,39 +78,41 @@ export default class App extends Component {
       this.state
 
     return (
-      <div className='movie-app'>
-        <div className='movie-app-header'>
-          <Header />
+      <MovieServiceProvider value={this.movieService}>
+        <div className='movie-app'>
+          <div className='movie-app-header'>
+            <Header setValue={this.setValue} />
+          </div>
+          <div className='movie-app-main'>
+            <MovieList
+              inputValue={inputValue}
+              setValue={this.setValue}
+              moviesArr={moviesArr}
+              loading={loading}
+              id={id}
+              title={title}
+              overview={overview}
+              releaseDate={releaseDate}
+              posterPath={posterPath}
+              voteAverage={voteAverage}
+              error={error}
+            />
+          </div>
+
+          <div className='movie-app-footer'>
+            <Pagination
+              className='app-pagination'
+              size='small'
+              total={500}
+              onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
+            />
+          </div>
         </div>
-        <div className='movie-app-main'>
-          {!loading ? (
-            <form>
-              <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
-            </form>
-          ) : null}
-          <MovieList
-            inputValue={inputValue}
-            setValue={this.setValue}
-            moviesArr={moviesArr}
-            loading={loading}
-            id={id}
-            title={title}
-            overview={overview}
-            releaseDate={releaseDate}
-            posterPath={posterPath}
-            voteAverage={voteAverage}
-            error={error}
-          />
-        </div>
-        <div className='movie-app-footer'>
-          <Pagination
-            className='app-pagination'
-            size='small'
-            total={50}
-            onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
-          />
-        </div>
-      </div>
+      </MovieServiceProvider>
     )
   }
+}
+
+App.defaultProps = {
+  inputValue: 'return',
 }

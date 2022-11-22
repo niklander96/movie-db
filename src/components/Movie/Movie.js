@@ -1,6 +1,7 @@
 import React from 'react'
 import { format } from 'date-fns'
 import { Rate, Progress } from 'antd'
+
 import './Movie.css'
 
 export default function Movie({ title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis }) {
@@ -41,4 +42,3 @@ export default function Movie({ title, overview, posterPath, voteAverage, releas
     </div>
   )
 }
-//

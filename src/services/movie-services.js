@@ -10,9 +10,38 @@ export default class MovieService {
   }
 
   async getMovies(string, number) {
-    const res = await this.getResource(
-      `search/movie?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&query=${string}&page=${number}`,
+    let res
+    if (string === '') {
+      res = await this.getResource(
+        `search/movie?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&query=return&page=${number}`,
+      )
+      return res.results
+    } else {
+      res = await this.getResource(
+        `search/movie?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&query=${string}&page=${number}`,
+      )
+      return res.results
+    }
+  }
+
+  async getGuestSession() {
+    let res
+    res = await this.getResource('authentication/guest_session/new?api_key=5e847ceaa13e81e351a64ec0755ba00e')
+    return res.results
+  }
+
+  async getRated(id) {
+    let res
+    res = await this.getResource(
+      `guest_session/${id}/rated/movies?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&sort_by=created_at.asc`,
     )
     return res.results
   }
+
+  async getGenre() {
+    let res = await this.getResource('genre/movie/list?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US')
+    return res.results
+  }
+
+
 }

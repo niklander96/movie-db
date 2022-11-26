@@ -3,12 +3,12 @@ import { format } from 'date-fns'
 import { Rate, Progress } from 'antd'
 
 import './Movie.css'
-
+import { MovieServiceConsumer } from '../MovieServiceContext'
 export default class Movie extends Component {
   progress
 
   render() {
-    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre } = this.props
+    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id } = this.props
     let formatDate
     try {
       formatDate = format(new Date(releaseDate), 'MMMM dd, yyyy')
@@ -67,28 +67,39 @@ export default class Movie extends Component {
     }
 
     return (
-
-        <div className='view'>
-          <div className='movie-avatar'>
-            <img src={`${posterPath}`} alt='movie' />
-          </div>
-          <div className='description'>
-            <div className='movie-title'>
-              <h1 className='movie-head'>{`${title}`}</h1>
-              <div>{this.progress}</div>
-            </div>
-            <span className='movie-date-exit'>{`${formatDate}`}</span>
-            <div className='movie-genres'>
-              <div className='movie-genre'>{`${genre}`}</div>
-              <div className='movie-genre'>Drama</div>
-            </div>
-            <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 4 } : false}>
-              {`${overview}`}
-            </Paragraph>
-            <Rate allowHalf defaultValue={0} count={10} />
-          </div>
+      <div className='view'>
+        <div className='movie-avatar'>
+          <img src={`${posterPath}`} alt='movie' />
         </div>
-
+        <div className='description'>
+          <div className='movie-title'>
+            <h1 className='movie-head'>{`${title}`}</h1>
+            <div>{this.progress}</div>
+          </div>
+          <span className='movie-date-exit'>{`${formatDate}`}</span>
+          <div className='movie-genres'>
+            <MovieServiceConsumer>
+              {(genres) => {
+                genres.map((el) => {
+                  genre.map((item) => {
+                    // console.log(el.idGenre, item, el.nameGenre)
+                    if (el.idGenre !== item) {
+                        console.log(el.nameGenre)
+                      return (<div className='movie-genre' key={id}>
+                        {`${el.nameGenre}`}
+                      </div>)
+                    }
+                  })
+                })
+              }}
+            </MovieServiceConsumer>
+          </div>
+          <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 4 } : false}>
+            {`${overview}`}
+          </Paragraph>
+          <Rate allowHalf defaultValue={0} count={10} />
+        </div>
+      </div>
     )
   }
 }

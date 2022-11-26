@@ -51,6 +51,7 @@ export default class App extends Component {
     this.movieService
       .getMovies(string, number)
       .then((movie) => {
+        console.log(movie)
         const arrM = movie.map((mov) => {
           return {
             id: mov.id,
@@ -93,7 +94,6 @@ export default class App extends Component {
     this.movieService.getRated(idG).then(() => {
       return (idG = this.state.guestId)
     })
-    console.log(idG)
   }
 
   getMovieGenres = () => {
@@ -122,11 +122,12 @@ export default class App extends Component {
       voteAverage,
       error,
       inputValue,
-      genres,
       genre,
+      genres,
     } = this.state
+    console.log(genre)
     return (
-      <MovieServiceProvider value={this.page}>
+      <MovieServiceProvider value={genres}>
         <div className='movie-app'>
           <div className='movie-app-header'>
             <Header setValue={this.setValue} />

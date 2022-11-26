@@ -27,21 +27,20 @@ export default class MovieService {
   async getGuestSession() {
     let res
     res = await this.getResource('authentication/guest_session/new?api_key=5e847ceaa13e81e351a64ec0755ba00e')
-    return res.results
+    return res.guest_session_id
   }
 
-  async getRated(id) {
+  async getRated(idG) {
     let res
     res = await this.getResource(
-      `guest_session/${id}/rated/movies?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&sort_by=created_at.asc`,
+      `guest_session/${idG}/rated/movies?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US&sort_by=created_at.asc`,
     )
     return res.results
   }
 
-  async getGenre() {
-    let res = await this.getResource('genre/movie/list?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US')
-    return res.results
+  async getGenres() {
+    let res
+    res = await this.getResource('genre/movie/list?api_key=5e847ceaa13e81e351a64ec0755ba00e&language=en-US')
+    return res.genres
   }
-
-
 }

@@ -5,8 +5,6 @@
     flex-direction: row;
 }
 
-
-
 h1 {
     font-style: normal;
     font-weight: 400;
@@ -83,4 +81,6 @@ img {
     flex-direction: row;
     margin: 12px 9px auto auto;
    }
-
+.ant-progress-circle.ant-progress-status-success .ant-progress-text {
+    color: #111111;
+}

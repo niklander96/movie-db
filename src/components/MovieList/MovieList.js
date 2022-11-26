@@ -37,12 +37,13 @@ export default class MovieList extends Component {
       )
     }
     const elMov = this.props.moviesArr.map((el) => {
-      const { title, id, overview, releaseDate, posterPath, voteAverage } = el
+      const { title, id, overview, releaseDate, posterPath, voteAverage, genre } = el
 
       return (
         <div className='movie-card' key={id}>
           <Movie
             moviesArr={el}
+            genre={genre}
             id={id}
             title={title}
             overview={overview}

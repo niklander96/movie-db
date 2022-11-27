@@ -111,6 +111,8 @@ export default class App extends Component {
   }
 
   render() {
+
+
     const {
       moviesArr,
       loading,
@@ -125,7 +127,7 @@ export default class App extends Component {
       genre,
       genres,
     } = this.state
-    console.log(genre)
+
     return (
       <MovieServiceProvider value={genres}>
         <div className='movie-app'>

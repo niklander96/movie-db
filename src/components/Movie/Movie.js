@@ -8,7 +8,8 @@ export default class Movie extends Component {
   progress
 
   render() {
-    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id } = this.props
+    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre } = this.props
+
     let formatDate
     try {
       formatDate = format(new Date(releaseDate), 'MMMM dd, yyyy')
@@ -66,6 +67,12 @@ export default class Movie extends Component {
       )
     }
 
+    const genreList = genre.map((item) => (
+            <div className='movie-genre' key={item.toString()}>
+              {item}
+            </div>
+    ))
+
     return (
       <div className='view'>
         <div className='movie-avatar'>
@@ -77,23 +84,11 @@ export default class Movie extends Component {
             <div>{this.progress}</div>
           </div>
           <span className='movie-date-exit'>{`${formatDate}`}</span>
+
           <div className='movie-genres'>
-            <MovieServiceConsumer>
-              {(genres) => {
-                genres.map((el) => {
-                  genre.map((item) => {
-                    // console.log(el.idGenre, item, el.nameGenre)
-                    if (el.idGenre !== item) {
-                        console.log(el.nameGenre)
-                      return (<div className='movie-genre' key={id}>
-                        {`${el.nameGenre}`}
-                      </div>)
-                    }
-                  })
-                })
-              }}
-            </MovieServiceConsumer>
+            {genreList}
           </div>
+
           <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 4 } : false}>
             {`${overview}`}
           </Paragraph>

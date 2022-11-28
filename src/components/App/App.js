@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Pagination } from 'antd'
+import { Input, Pagination, Tabs } from 'antd'
 import { debounce } from 'lodash'
 
-import Header from '../Header'
 import MovieList from '../MovieList'
 import './App.css'
 import MovieService from '../../services/movie-services'
@@ -51,7 +50,6 @@ export default class App extends Component {
     this.movieService
       .getMovies(string, number)
       .then((movie) => {
-        console.log(movie)
         const arrM = movie.map((mov) => {
           return {
             id: mov.id,
@@ -111,8 +109,6 @@ export default class App extends Component {
   }
 
   render() {
-
-
     const {
       moviesArr,
       loading,
@@ -131,33 +127,69 @@ export default class App extends Component {
     return (
       <MovieServiceProvider value={genres}>
         <div className='movie-app'>
-          <div className='movie-app-header'>
-            <Header setValue={this.setValue} />
-          </div>
-          <div className='movie-app-main'>
-            <MovieList
-              genre={genre}
-              inputValue={inputValue}
-              setValue={this.setValue}
-              moviesArr={moviesArr}
-              loading={loading}
-              id={id}
-              title={title}
-              overview={overview}
-              releaseDate={releaseDate}
-              posterPath={posterPath}
-              voteAverage={voteAverage}
-              error={error}
-            />
-          </div>
+          <div className='buttons'>
+            <Tabs
+              defaultActivityKey='1'
+              className='button app-search-button'
+              destroyInactiveTabPane='true'
+              size='large'
+            >
+              <Tabs.TabPane tab='Search' key='1'>
+                <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
+                <div className='movie-app-main'>
+                  <MovieList
+                    genre={genre}
+                    inputValue={inputValue}
+                    setValue={this.setValue}
+                    moviesArr={moviesArr}
+                    loading={loading}
+                    id={id}
+                    title={title}
+                    overview={overview}
+                    releaseDate={releaseDate}
+                    posterPath={posterPath}
+                    voteAverage={voteAverage}
+                    error={error}
+                  />
+                </div>
 
-          <div className='movie-app-footer'>
-            <Pagination
-              className='app-pagination'
-              size='small'
-              total={500}
-              onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
-            />
+                <div className='movie-app-footer'>
+                  <Pagination
+                    className='app-pagination'
+                    size='small'
+                    total={500}
+                    onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
+                  />
+                </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab='Rated' key='2'>
+                <div className='movie-app-main'>
+                  <MovieList
+                    genre={genre}
+                    inputValue={inputValue}
+                    setValue={this.setValue}
+                    moviesArr={moviesArr}
+                    loading={loading}
+                    id={id}
+                    title={title}
+                    overview={overview}
+                    releaseDate={releaseDate}
+                    posterPath={posterPath}
+                    voteAverage={voteAverage}
+                    error={error}
+                  />
+                </div>
+
+                <div className='movie-app-footer'>
+                  <Pagination
+                    className='app-pagination'
+                    size='small'
+                    total={500}
+                    onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
+                  />
+                </div>
+              </Tabs.TabPane>
+            </Tabs>
           </div>
         </div>
       </MovieServiceProvider>

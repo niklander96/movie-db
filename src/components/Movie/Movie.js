@@ -4,6 +4,7 @@ import { Rate, Progress } from 'antd'
 
 import './Movie.css'
 import { MovieServiceConsumer } from '../MovieServiceContext'
+
 export default class Movie extends Component {
   progress
 
@@ -68,9 +69,19 @@ export default class Movie extends Component {
     }
 
     const genreList = genre.map((item) => (
+      <MovieServiceConsumer key={item.toString()}>
+        {(genres) => {
+          return (
             <div className='movie-genre' key={item.toString()}>
-              {item}
+              {genres.map((el) => {
+                if (item === el.idGenre) {
+                  return el.nameGenre
+                }
+              })}
             </div>
+          )
+        }}
+      </MovieServiceConsumer>
     ))
 
     return (
@@ -84,12 +95,8 @@ export default class Movie extends Component {
             <div>{this.progress}</div>
           </div>
           <span className='movie-date-exit'>{`${formatDate}`}</span>
-
-          <div className='movie-genres'>
-            {genreList}
-          </div>
-
-          <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 4 } : false}>
+          <div className='movie-genres'>{genreList}</div>
+          <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 3 } : false}>
             {`${overview}`}
           </Paragraph>
           <Rate allowHalf defaultValue={0} count={10} />

@@ -10,10 +10,6 @@
     background: #FFFFFF;
 }
 
-.button {
-    border: none;
-}
-
 .ant-input {
     margin: auto;
     display: flex;
@@ -25,3 +21,27 @@
 .app-pagination {
     margin-bottom: 17px;
 }
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    border: none;
+}
+
+.app-search-field .ant-input {
+    width: 938px;
+    height: 40px;
+}
+
+.ant-tabs-nav-wrap {
+    display: flex;
+    justify-content: center;
+
+}
+
+.ant-tabs-top > .ant-tabs-nav::before {
+    width: 120px;
+    align-self: center;
+    margin: auto;
+}
+

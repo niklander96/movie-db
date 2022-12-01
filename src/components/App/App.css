@@ -8,6 +8,17 @@
     width: 1010px;
     height: auto;
     background: #FFFFFF;
+    font-family: 'Inter';
+}
+
+.ant-alert {
+    width: 1010px;
+    font-size: 40px;
+    margin: 205px auto;
+}
+
+.ant-alert-message {
+    font-size: 40px;
 }
 
 .ant-input {
@@ -19,7 +30,9 @@
 }
 
 .app-pagination {
-    margin-bottom: 17px;
+    margin: 17px auto 18px auto;
+    display: flex;
+    justify-content: center;
 }
 
 .buttons {
@@ -40,7 +53,7 @@
 }
 
 .ant-tabs-top > .ant-tabs-nav::before {
-    width: 120px;
+    width: 129px;
     align-self: center;
     margin: auto;
 }

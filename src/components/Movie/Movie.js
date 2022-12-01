@@ -4,13 +4,29 @@ import { Rate, Progress } from 'antd'
 
 import './Movie.css'
 import { MovieServiceConsumer } from '../MovieServiceContext'
+import MovieService from '../../services/movie-services'
 
 export default class Movie extends Component {
   progress
+  movieService = new MovieService()
+
+  saveStars = (movieId, rateMovie) => {
+    const guestId = sessionStorage.getItem('guestId')
+    console.log(guestId)
+    localStorage.setItem(movieId, JSON.stringify(rateMovie))
+    this.movieService.setRated(movieId, rateMovie, guestId).then()
+  }
+
+  // setRating = (movieId) => {
+  //     this.movieService.setRated(movieId).then((id) => {
+  //         console.log(id)
+  //         return JSON.stringify(id)
+  //     })
+  // }
 
   render() {
-    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre } = this.props
-
+    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id } = this.props
+    const defaultRate = localStorage.getItem(id) ? localStorage.getItem(id) : 0
     let formatDate
     try {
       formatDate = format(new Date(releaseDate), 'MMMM dd, yyyy')
@@ -99,7 +115,7 @@ export default class Movie extends Component {
           <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 3 } : false}>
             {`${overview}`}
           </Paragraph>
-          <Rate allowHalf defaultValue={0} count={10} />
+          <Rate defaultValue={defaultRate} count={10} onChange={(rate) => this.saveStars(id, rate)} />
         </div>
       </div>
     )

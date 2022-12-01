@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Input, Pagination, Tabs } from 'antd'
+import { Alert, Input, Pagination, Tabs } from 'antd'
 import { debounce } from 'lodash'
+import { Detector } from 'react-detect-offline'
 
 import MovieList from '../MovieList'
 import './App.css'
@@ -11,17 +12,21 @@ export default class App extends Component {
   page = 1
   state = {
     moviesArr: [],
+    moviesArrRate: [],
     genres: [],
+    stars: [],
     loading: true,
     error: false,
     currentPage: this.page,
     guestId: '',
     inputValue: 'return',
+    isSwitched: false,
   }
 
   movieService = new MovieService()
 
   componentDidMount() {
+    this.getSavedStars()
     this.guestSession()
     this.getMovieGenres()
     this.updateMovie(this.state.inputValue, this.state.currentPage)
@@ -30,12 +35,13 @@ export default class App extends Component {
     })
   }
 
+  // componentWillUnmount() {
+  //   this.updateRatedMovie(this.state.guestId)
+  // }
+
   componentDidUpdate(prevState) {
     if (this.state.currentPage === prevState.currentPage) {
       this.updateMovie()
-    }
-    if (this.state.guestId !== prevState.guestId) {
-      this.getRating(this.state.guestId)
     }
   }
 
@@ -65,13 +71,44 @@ export default class App extends Component {
         this.setState({
           moviesArr: arrM,
           loading: false,
+          isSwitched: false,
         })
       })
       .catch(this.onError)
   }
 
+  updateRatedMovie = (guestId, page) => {
+    this.movieService
+      .getRatedMovies(guestId, page)
+      .then((movie) => {
+        const arrR = movie.map((mov) => {
+          return {
+            id: mov.id,
+            title: mov.title,
+            genre: mov.genre_ids,
+            overview: mov.overview,
+            releaseDate: mov.release_date,
+            posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
+            voteAverage: mov.vote_average,
+            currentPage: mov.page,
+          }
+        })
+        this.setState({
+          moviesArrRate: arrR,
+          loading: false,
+          isSwitched: true,
+        })
+      })
+      .catch(this.onError)
+  }
+
+  getSavedStars = () => {
+    localStorage.clear()
+  }
+
   setValue = debounce((e) => {
     this.updateMovie(e.target.value, this.state.currentPage)
+    this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
     this.setState({
       loading: true,
       inputValue: e.target.value,
@@ -80,18 +117,8 @@ export default class App extends Component {
   }, 1000)
 
   guestSession = () => {
-    this.movieService.getGuestSession().then((guest) => {
-      this.setState({
-        guestId: guest,
-      })
-      return guest
-    })
-  }
-
-  getRating = (idG) => {
-    this.movieService.getRated(idG).then(() => {
-      return (idG = this.state.guestId)
-    })
+    this.movieService.getGuestSession().then((guest) => sessionStorage.setItem('guestId', guest))
+    console.log(this.state.guestId)
   }
 
   getMovieGenres = () => {
@@ -111,6 +138,7 @@ export default class App extends Component {
   render() {
     const {
       moviesArr,
+      moviesArrRate,
       loading,
       id,
       title,
@@ -122,76 +150,78 @@ export default class App extends Component {
       inputValue,
       genre,
       genres,
+      guestId,
+      isSwitched,
     } = this.state
 
     return (
       <MovieServiceProvider value={genres}>
-        <div className='movie-app'>
-          <div className='buttons'>
-            <Tabs
-              defaultActivityKey='1'
-              className='button app-search-button'
-              destroyInactiveTabPane='true'
-              size='large'
-            >
-              <Tabs.TabPane tab='Search' key='1'>
-                <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
-                <div className='movie-app-main'>
-                  <MovieList
-                    genre={genre}
-                    inputValue={inputValue}
-                    setValue={this.setValue}
-                    moviesArr={moviesArr}
-                    loading={loading}
-                    id={id}
-                    title={title}
-                    overview={overview}
-                    releaseDate={releaseDate}
-                    posterPath={posterPath}
-                    voteAverage={voteAverage}
-                    error={error}
-                  />
+        <Detector
+          render={({ online }) =>
+            online ? (
+              <div className='movie-app'>
+                <div className='buttons'>
+                  <Tabs
+                    defaultActivityKey='1'
+                    className='button app-search-button'
+                    destroyInactiveTabPane='true'
+                    size='large'
+                    onChange={() =>
+                      !isSwitched
+                        ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
+                        : this.updateMovie(this.state.inputValue, this.state.currentPage)
+                    }
+                  >
+                    <Tabs.TabPane tab='Search' key='1' className='movie-app-button-searching'>
+                      <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab='Rated' key='2' className='movie-app-button-rating'></Tabs.TabPane>
+                  </Tabs>
                 </div>
+                <MovieList
+                  genre={genre}
+                  inputValue={inputValue}
+                  setValue={this.setValue}
+                  moviesArr={moviesArr}
+                  moviesArrRate={moviesArrRate}
+                  loading={loading}
+                  id={id}
+                  isSwitched={isSwitched}
+                  guestId={guestId}
+                  title={title}
+                  overview={overview}
+                  releaseDate={releaseDate}
+                  posterPath={posterPath}
+                  voteAverage={voteAverage}
+                  error={error}
+                  saveStars={this.saveStars}
+                  setRated={this.setRating}
+                />
 
                 <div className='movie-app-footer'>
                   <Pagination
                     className='app-pagination'
                     size='small'
                     total={500}
-                    onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
+                    onChange={
+                      isSwitched
+                        ? (currentPage) => this.updateRatedMovie(sessionStorage.getItem('guestId'), currentPage)
+                        : (currentPage) => this.updateMovie(inputValue, currentPage)
+                    }
                   />
                 </div>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab='Rated' key='2'>
-                <div className='movie-app-main'>
-                  <MovieList
-                    genre={genre}
-                    inputValue={inputValue}
-                    setValue={this.setValue}
-                    moviesArr={moviesArr}
-                    loading={loading}
-                    id={id}
-                    title={title}
-                    overview={overview}
-                    releaseDate={releaseDate}
-                    posterPath={posterPath}
-                    voteAverage={voteAverage}
-                    error={error}
-                  />
-                </div>
-
-                <div className='movie-app-footer'>
-                  <Pagination
-                    className='app-pagination'
-                    size='small'
-                    total={500}
-                    onChange={(currentPage) => this.updateMovie(inputValue, currentPage)}
-                  />
-                </div>
-              </Tabs.TabPane>
-            </Tabs>
-          </div>
-        </div>
+              </div>
+            ) : (
+              <Alert
+                className='alert'
+                message='Нет подключения к сети'
+                description='Проверьте настройки сетевого подкючения.'
+                type='error'
+                closable
+              />
+            )
+          }
+        />
       </MovieServiceProvider>
     )
   }

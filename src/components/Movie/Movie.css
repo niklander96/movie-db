@@ -10,7 +10,7 @@ h1 {
     font-weight: 400;
     font-size: 20px;
     line-height: 28px;
-    max-width: 210px;
+    max-width: 220px;
 }
 
 .view {
@@ -91,4 +91,69 @@ img {
    }
 .ant-progress-circle.ant-progress-status-success .ant-progress-text {
     color: #111111;
+}
+
+@media screen and (max-width: 420px) {
+    h1 {
+        margin-left: 67px;
+        margin-bottom: 7px;
+    }
+
+    .view {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        font-family: 'Inter';
+        justify-content: flex-start;
+        width: 387px;
+        height: 245px;
+        background: #FFFFFF;
+        list-style: none;
+        margin: 18px 19px 18px 16px;
+        box-shadow: 1px 2px 5px 5px #E5E5E5;
+    }
+    img {
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        margin: 6px 10px;
+        width: 60px;
+        height: 91px;
+    }
+    .description {
+        margin-left: 9px;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        box-sizing: border-box;
+        width: 271px;
+        padding: 4px 0 0 3px;
+    }
+
+    .movie-date-exit {
+        margin-left: 67px
+    }
+
+    .ant-typography {
+        width: 367px;
+        height: auto;
+        overflow: hidden;
+    }
+    .movie-genre {
+        max-width: 90px;
+    }
+    .movie-genres {
+        box-sizing: border-box;
+        max-width: 250px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        margin-left: 67px;
+    }
+
+    .ant-progress {
+        margin: 5px 8px auto auto;
+        left: 0;
+    }
 }

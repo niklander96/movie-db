@@ -7,7 +7,7 @@
     margin: 0 auto;
     width: 1010px;
     height: auto;
-    background: #FFFFFF;
+    /*background: #FFFFFF;*/
     font-family: 'Inter';
 }
 
@@ -36,6 +36,7 @@
 }
 
 .buttons {
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
     border: none;
@@ -58,3 +59,21 @@
     margin: auto;
 }
 
+@media screen and (max-width: 420px) {
+    .movie-app {
+        width: 420px;
+        margin: 0 auto;
+    }
+
+    .ant-input {
+        margin: auto;
+        display: flex;
+        align-items: center;
+        width: 388px;
+        height: 40px;
+    }
+
+    .movie-card {
+        max-width: 416px;
+    }
+}

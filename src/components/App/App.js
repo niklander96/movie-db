@@ -26,10 +26,13 @@ export default class App extends Component {
   movieService = new MovieService()
 
   componentDidMount() {
+    const { isSwitched } = this.state
     this.getSavedStars()
     this.guestSession()
     this.getMovieGenres()
-    this.updateMovie(this.state.inputValue, this.state.currentPage)
+    isSwitched
+      ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
+      : this.updateMovie(this.state.inputValue, this.state.currentPage)
     this.setState({
       loading: true,
     })
@@ -171,7 +174,7 @@ export default class App extends Component {
                   <div className='buttons'>
                     <Tabs
                       className='button app-search-button'
-                      destroyInactiveTabPane='true'
+                      destroyInactiveTabPane='false'
                       size='large'
                       onChange={() =>
                         !isSwitched

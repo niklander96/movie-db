@@ -3,14 +3,15 @@
 .movie-title {
     display: flex;
     flex-direction: row;
+    width: 230px;
+
 }
 
-h1 {
+.movie-head {
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
     line-height: 28px;
-    max-width: 220px;
 }
 
 .view {
@@ -41,7 +42,7 @@ img {
     align-self: flex-start;
     box-sizing: border-box;
     width: 271px;
-    padding: 12px 20px 0 20px;
+    padding: 12px 20px 0 12px;
 }
 
 .movie-genre {
@@ -79,6 +80,10 @@ img {
     font-size: 16px;
 }
 
+.ant-typography {
+    margin-top: 5px;
+}
+
 .ant-progress {
     position: absolute;
     width: 30px;
@@ -94,9 +99,14 @@ img {
 }
 
 @media screen and (max-width: 420px) {
-    h1 {
+    .movie-title {
+        width: 300px;
+    }
+
+    .movie-head {
         margin-left: 67px;
-        margin-bottom: 7px;
+        margin-bottom: 5px;
+        width: 300px;
     }
 
     .view {
@@ -131,25 +141,24 @@ img {
     }
 
     .movie-date-exit {
-        margin-left: 67px
+        margin-left: 67px;
     }
 
     .ant-typography {
         width: 367px;
         height: auto;
-        overflow: hidden;
-    }
-    .movie-genre {
-        max-width: 90px;
+        margin-top: 5px;
     }
     .movie-genres {
         box-sizing: border-box;
-        max-width: 250px;
+        width: 300px;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         margin-left: 67px;
+        margin-bottom: 5px;
+        margin-top: 2px;
     }
 
     .ant-progress {

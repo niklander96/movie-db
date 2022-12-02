@@ -79,8 +79,6 @@ export default class MovieList extends Component {
         </div>
       )
     })
-    console.log(isSwitched)
-    console.log(elMovRated)
     return !isSwitched ? (
       <div className='movie-list'>{elMov}</div>
     ) : (

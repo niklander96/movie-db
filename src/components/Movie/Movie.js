@@ -12,17 +12,9 @@ export default class Movie extends Component {
 
   saveStars = (movieId, rateMovie) => {
     const guestId = sessionStorage.getItem('guestId')
-    console.log(guestId)
     localStorage.setItem(movieId, JSON.stringify(rateMovie))
     this.movieService.setRated(movieId, rateMovie, guestId).then()
   }
-
-  // setRating = (movieId) => {
-  //     this.movieService.setRated(movieId).then((id) => {
-  //         console.log(id)
-  //         return JSON.stringify(id)
-  //     })
-  // }
 
   render() {
     const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id } = this.props

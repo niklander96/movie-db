@@ -26,7 +26,6 @@ export default class MovieService {
     if (!guestId) throw new Error('Guest session not created')
     const req = await fetch(`${this.apiBase}guest_session/${guestId}/rated/movies?api_key=${this.apiKey}&page=${page}`)
     const res = await req.json()
-    console.log(res.results)
     return res.results
   }
 

@@ -35,10 +35,6 @@ export default class App extends Component {
     })
   }
 
-  // componentWillUnmount() {
-  //   this.updateRatedMovie(this.state.guestId)
-  // }
-
   componentDidUpdate(prevState) {
     if (this.state.currentPage === prevState.currentPage) {
       this.updateMovie()
@@ -118,7 +114,6 @@ export default class App extends Component {
 
   guestSession = () => {
     this.movieService.getGuestSession().then((guest) => sessionStorage.setItem('guestId', guest))
-    console.log(this.state.guestId)
   }
 
   getMovieGenres = () => {
@@ -154,75 +149,84 @@ export default class App extends Component {
       isSwitched,
     } = this.state
 
+    const items = [
+      {
+        label: 'Search',
+        key: '1',
+        children: <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />,
+      },
+      {
+        label: 'Rated',
+        key: '2',
+        children: '',
+      },
+    ]
     return (
-      <MovieServiceProvider value={genres}>
-        <Detector
-          render={({ online }) =>
-            online ? (
-              <div className='movie-app'>
-                <div className='buttons'>
-                  <Tabs
-                    defaultActivityKey='1'
-                    className='button app-search-button'
-                    destroyInactiveTabPane='true'
-                    size='large'
-                    onChange={() =>
-                      !isSwitched
-                        ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
-                        : this.updateMovie(this.state.inputValue, this.state.currentPage)
-                    }
-                  >
-                    <Tabs.TabPane tab='Search' key='1' className='movie-app-button-searching'>
-                      <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab='Rated' key='2' className='movie-app-button-rating'></Tabs.TabPane>
-                  </Tabs>
-                </div>
-                <MovieList
-                  genre={genre}
-                  inputValue={inputValue}
-                  setValue={this.setValue}
-                  moviesArr={moviesArr}
-                  moviesArrRate={moviesArrRate}
-                  loading={loading}
-                  id={id}
-                  isSwitched={isSwitched}
-                  guestId={guestId}
-                  title={title}
-                  overview={overview}
-                  releaseDate={releaseDate}
-                  posterPath={posterPath}
-                  voteAverage={voteAverage}
-                  error={error}
-                  saveStars={this.saveStars}
-                  setRated={this.setRating}
-                />
-
-                <div className='movie-app-footer'>
-                  <Pagination
-                    className='app-pagination'
-                    size='small'
-                    total={500}
-                    onChange={
-                      isSwitched
-                        ? (currentPage) => this.updateRatedMovie(sessionStorage.getItem('guestId'), currentPage)
-                        : (currentPage) => this.updateMovie(inputValue, currentPage)
-                    }
+      <div className='page'>
+        <MovieServiceProvider value={genres}>
+          <Detector
+            render={({ online }) =>
+              online ? (
+                <div className='movie-app'>
+                  <div className='buttons'>
+                    <Tabs
+                      className='button app-search-button'
+                      destroyInactiveTabPane='true'
+                      size='large'
+                      onChange={() =>
+                        !isSwitched
+                          ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
+                          : this.updateMovie(this.state.inputValue, this.state.currentPage)
+                      }
+                      items={items}
+                    />
+                  </div>
+                  <MovieList
+                    genre={genre}
+                    inputValue={inputValue}
+                    setValue={this.setValue}
+                    moviesArr={moviesArr}
+                    moviesArrRate={moviesArrRate}
+                    loading={loading}
+                    id={id}
+                    isSwitched={isSwitched}
+                    guestId={guestId}
+                    title={title}
+                    overview={overview}
+                    releaseDate={releaseDate}
+                    posterPath={posterPath}
+                    voteAverage={voteAverage}
+                    error={error}
+                    saveStars={this.saveStars}
+                    setRated={this.setRating}
                   />
+
+                  <div className='movie-app-footer'>
+                    <Pagination
+                      className='app-pagination'
+                      size='small'
+                      total={50}
+                      onChange={
+                        isSwitched
+                          ? (currentPage) => this.updateRatedMovie(sessionStorage.getItem('guestId'), currentPage)
+                          : (currentPage) => this.updateMovie(inputValue, currentPage)
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <Alert
-                className='alert'
-                message='Нет подключения к сети'
-                description='Проверьте настройки сетевого подкючения.'
-                type='error'
-                closable
-              />
-            )
-          }
-        />
-      </MovieServiceProvider>
+              ) : (
+                <Alert
+                  className='alert'
+                  message='Нет подключения к сети'
+                  description='Проверьте настройки сетевого подкючения.'
+                  type='error'
+                  closable
+                />
+              )
+            }
+          />
+        </MovieServiceProvider>
+      </div>
     )
   }
 }

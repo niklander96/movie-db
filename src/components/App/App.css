@@ -1,18 +1,19 @@
 @import '~antd/dist/antd.css';
 
 .movie-app {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
+    align-self: center;
+    margin: auto;
     width: 1010px;
     height: auto;
-    /*background: #FFFFFF;*/
+    background: #FFFFFF;
     font-family: 'Inter';
 }
 
 .ant-alert {
-    width: 1010px;
+    width: auto;
     font-size: 40px;
     margin: 205px auto;
 }
@@ -47,16 +48,19 @@
     height: 40px;
 }
 
-.ant-tabs-nav-wrap {
+.ant-tabs .ant-tabs-nav-wrap {
+    position: relative;
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
-
+    margin: 0 auto;
+    height: 100%;
 }
 
-.ant-tabs-top > .ant-tabs-nav::before {
+.ant-tabs-nav::before {
     width: 129px;
-    align-self: center;
-    margin: auto;
+    /*align-self: center;*/
+    margin: 0 auto;
 }
 
 @media screen and (max-width: 420px) {

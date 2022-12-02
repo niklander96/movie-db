@@ -1,19 +1,14 @@
 .movie-list  {
-    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background: #FFFFFF;
     justify-content: center;
 }
 
-movie-list-rated {
-    box-sizing: border-box;
-    width: 1010px;
-    display: inline-block;
+.movie-list-rated {
+    display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    background: #FFFFFF;
+    flex-wrap: wrap;
     justify-content: center;
 }
 

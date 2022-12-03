@@ -11,6 +11,7 @@ export default class MovieList extends Component {
   render() {
     const { Paragraph } = Typography
     const { loading, moviesArr } = this.props
+
     if (loading) {
       return (
         <Spin tip='Loading...'>
@@ -33,7 +34,6 @@ export default class MovieList extends Component {
     const { isSwitched } = this.props
     const elMovRated = this.props.moviesArrRate.map((el) => {
       const { title, id, overview, releaseDate, posterPath, voteAverage, genre, setRating, saveStars, guestId } = el
-      console.log(el)
       return (
         <div className='movie-card' key={id}>
           <Movie

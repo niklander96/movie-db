@@ -2,7 +2,7 @@
 .movie-title {
     display: flex;
     flex-direction: row;
-    width: 230px;
+    width: 210px;
 }
 
 .movie-head {

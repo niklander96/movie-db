@@ -27,12 +27,13 @@ export default class App extends Component {
 
   componentDidMount() {
     const { isSwitched } = this.state
-    this.getSavedStars()
     this.guestSession()
-    this.getMovieGenres()
     isSwitched
       ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
       : this.updateMovie(this.state.inputValue, this.state.currentPage)
+    this.getSavedStars()
+
+    this.getMovieGenres()
     this.setState({
       loading: true,
     })
@@ -107,7 +108,6 @@ export default class App extends Component {
 
   setValue = debounce((e) => {
     this.updateMovie(e.target.value, this.state.currentPage)
-    this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
     this.setState({
       loading: true,
       inputValue: e.target.value,
@@ -174,12 +174,12 @@ export default class App extends Component {
                   <div className='buttons'>
                     <Tabs
                       className='button app-search-button'
-                      destroyInactiveTabPane='false'
+                      destroyInactiveTabPane='true'
                       size='large'
                       onChange={() =>
-                        !isSwitched
-                          ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
-                          : this.updateMovie(this.state.inputValue, this.state.currentPage)
+                        isSwitched
+                          ? this.updateMovie(this.state.inputValue, this.state.currentPage)
+                          : this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
                       }
                       items={items}
                     />

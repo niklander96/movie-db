@@ -10,6 +10,10 @@ export default class Movie extends Component {
   progress
   movieService = new MovieService()
 
+  state = {
+    loading: this.props.loading,
+  }
+
   saveStars = (movieId, rateMovie) => {
     const guestId = sessionStorage.getItem('guestId')
     localStorage.setItem(movieId, JSON.stringify(rateMovie))

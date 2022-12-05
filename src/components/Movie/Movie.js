@@ -11,7 +11,13 @@ export default class Movie extends Component {
   movieService = new MovieService()
 
   state = {
-    loading: this.props.loading,
+    loading: true,
+  }
+
+  handleOnLoad = () => {
+    this.setState({
+      loading: false,
+    })
   }
 
   saveStars = (movieId, rateMovie) => {
@@ -21,13 +27,14 @@ export default class Movie extends Component {
   }
 
   render() {
-    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id } = this.props
+    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id, loading } =
+      this.props
     const defaultRate = localStorage.getItem(id) ? localStorage.getItem(id) : 0
     let formatDate
     try {
       formatDate = format(new Date(releaseDate), 'MMMM dd, yyyy')
     } catch (error) {
-      console.log(error.message)
+      error.message
     }
 
     if (voteAverage >= 0 && voteAverage <= 3) {
@@ -99,7 +106,8 @@ export default class Movie extends Component {
     return (
       <div className='view'>
         <div className='movie-avatar'>
-          <img src={`${posterPath}`} alt='movie' />
+          {loading && <img src='https://via.placeholder.com/250x200' alt='lock' />}
+          <img src={`${posterPath}`} alt='movie' onLoad={this.handleOnLoad} />
         </div>
         <div className='description'>
           <div className='movie-title'>

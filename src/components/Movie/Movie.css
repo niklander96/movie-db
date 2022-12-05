@@ -96,6 +96,11 @@ img {
     color: #111111;
 }
 
+.lock-image {
+    width: 183px;
+    height: 281px;
+}
+
 @media screen and (max-width: 420px) {
     .movie-title {
         width: 300px;
@@ -163,4 +168,9 @@ img {
         margin: 5px 8px auto auto;
         left: 0;
     }
+    .lock-image {
+        width: 60px;
+        height: 91px;
+    }
+
 }

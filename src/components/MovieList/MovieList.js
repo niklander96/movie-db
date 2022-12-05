@@ -33,7 +33,19 @@ export default class MovieList extends Component {
 
     const { isSwitched } = this.props
     const elMovRated = this.props.moviesArrRate.map((el) => {
-      const { title, id, overview, releaseDate, posterPath, voteAverage, genre, setRating, saveStars, guestId } = el
+      const {
+        title,
+        id,
+        overview,
+        releaseDate,
+        posterPath,
+        voteAverage,
+        genre,
+        setRating,
+        saveStars,
+        guestId,
+        onError,
+      } = el
       return (
         <div className='movie-card' key={id}>
           <Movie
@@ -42,6 +54,7 @@ export default class MovieList extends Component {
             id={id}
             guestId={guestId}
             title={title}
+            onError={onError}
             overview={overview}
             releaseDate={releaseDate}
             posterPath={posterPath}
@@ -57,7 +70,19 @@ export default class MovieList extends Component {
     })
 
     const elMov = this.props.moviesArr.map((el) => {
-      const { title, id, overview, releaseDate, posterPath, voteAverage, genre, setRating, saveStars, guestId } = el
+      const {
+        title,
+        id,
+        overview,
+        releaseDate,
+        posterPath,
+        voteAverage,
+        genre,
+        setRating,
+        saveStars,
+        guestId,
+        onError,
+      } = el
       return (
         <div className='movie-card' key={id}>
           <Movie
@@ -66,6 +91,7 @@ export default class MovieList extends Component {
             id={id}
             guestId={guestId}
             title={title}
+            onError={onError}
             overview={overview}
             releaseDate={releaseDate}
             posterPath={posterPath}

@@ -15,7 +15,7 @@ export default class App extends Component {
     moviesArrRate: [],
     genres: [],
     stars: [],
-    loading: true,
+    loading: false,
     error: false,
     currentPage: this.page,
     guestId: '',
@@ -31,8 +31,6 @@ export default class App extends Component {
     isSwitched
       ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
       : this.updateMovie(this.state.inputValue, this.state.currentPage)
-    // this.getSavedStars()
-
     this.getMovieGenres()
     this.setState({
       loading: true,
@@ -74,7 +72,7 @@ export default class App extends Component {
           isSwitched: false,
         })
       })
-      .catch(this.onError)
+      .catch(() => this.onError)
   }
 
   updateRatedMovie = (guestId, page) => {
@@ -99,12 +97,8 @@ export default class App extends Component {
           isSwitched: true,
         })
       })
-      .catch(this.onError)
+      .catch(() => this.onError)
   }
-
-  // getSavedStars = () => {
-  //   localStorage.clear()
-  // }
 
   setValue = debounce((e) => {
     this.updateMovie(e.target.value, this.state.currentPage)
@@ -209,7 +203,7 @@ export default class App extends Component {
                     <Pagination
                       className='app-pagination'
                       size='small'
-                      total={890}
+                      total={5000}
                       onChange={
                         isSwitched
                           ? (currentPage) => this.updateRatedMovie(sessionStorage.getItem('guestId'), currentPage)

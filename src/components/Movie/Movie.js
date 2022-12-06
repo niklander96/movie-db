@@ -37,56 +37,6 @@ export default class Movie extends Component {
       error.message
     }
 
-    if (voteAverage >= 0 && voteAverage <= 3) {
-      this.progress = (
-        <Progress
-          type='circle'
-          width={30}
-          percent={100}
-          format={() => voteAverage}
-          strokeColor={{
-            '100%': '#E90000',
-          }}
-        />
-      )
-    } else if (voteAverage >= 3 && voteAverage <= 5) {
-      this.progress = (
-        <Progress
-          type='circle'
-          width={30}
-          percent={100}
-          format={() => voteAverage}
-          strokeColor={{
-            '100%': '#E97E00',
-          }}
-        />
-      )
-    } else if (voteAverage >= 5 && voteAverage <= 7) {
-      this.progress = (
-        <Progress
-          type='circle'
-          width={30}
-          percent={100}
-          format={() => voteAverage}
-          strokeColor={{
-            '100%': '#E9D100',
-          }}
-        />
-      )
-    } else if (voteAverage > 7) {
-      this.progress = (
-        <Progress
-          type='circle'
-          width={30}
-          percent={100}
-          format={() => voteAverage}
-          strokeColor={{
-            '100%': '#66E900',
-          }}
-        />
-      )
-    }
-
     const genreList = genre.map((item) => (
       <MovieServiceConsumer key={item.toString()}>
         {(genres) => {
@@ -112,7 +62,21 @@ export default class Movie extends Component {
         <div className='description'>
           <div className='movie-title'>
             <h1 className='movie-head'>{`${title}`}</h1>
-            <div>{this.progress}</div>
+            <div>
+              <Progress
+                type='circle'
+                width={30}
+                percent={100}
+                format={() => voteAverage}
+                strokeColor={{
+                  '100%':
+                    (voteAverage >= 0 && voteAverage <= 3 && '#E90000') ||
+                    (voteAverage >= 3 && voteAverage <= 5 && '#E97E00') ||
+                    (voteAverage >= 5 && voteAverage <= 7 && '#E9D100') ||
+                    (voteAverage > 7 && '#66E900'),
+                }}
+              />
+            </div>
           </div>
           <span className='movie-date-exit'>{`${formatDate}`}</span>
           <div className='movie-genres'>{genreList}</div>

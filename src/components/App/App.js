@@ -6,6 +6,7 @@ import { Detector } from 'react-detect-offline'
 import MovieList from '../MovieList'
 import './App.css'
 import MovieService from '../../services/movie-services'
+import MovieServiceSession from '../../services/movie-service-session'
 import { MovieServiceProvider } from '../MovieServiceContext'
 
 export default class App extends Component {
@@ -24,6 +25,7 @@ export default class App extends Component {
   }
 
   movieService = new MovieService()
+  movieServiceSession = new MovieServiceSession()
 
   componentDidMount() {
     const { isSwitched } = this.state
@@ -76,7 +78,7 @@ export default class App extends Component {
   }
 
   updateRatedMovie = (guestId, page) => {
-    this.movieService
+    this.movieServiceSession
       .getRatedMovies(guestId, page)
       .then((movie) => {
         const arrR = movie.map((mov) => {
@@ -110,7 +112,7 @@ export default class App extends Component {
   }, 1000)
 
   guestSession = () => {
-    this.movieService.getGuestSession().then((guest) => sessionStorage.setItem('guestId', guest))
+    this.movieServiceSession.getGuestSession().then((guest) => sessionStorage.setItem('guestId', guest))
   }
 
   getMovieGenres = () => {

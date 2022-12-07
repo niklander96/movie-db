@@ -34,6 +34,26 @@ img {
     height: 281px;
 }
 
+img::before {
+    content: ' ';
+    display: block;
+    position: absolute;
+
+}
+
+img::after {
+    content: url("https://fakeimg.pl/183x281/");
+    display: block;
+    background: #E5E5E5;
+    width: 183px;
+    height: 281px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
 .description {
     display: flex;
     flex-direction: column;
@@ -133,6 +153,27 @@ img {
         width: 60px;
         height: 91px;
     }
+
+    img::before {
+        content: ' ';
+        display: block;
+        position: absolute;
+
+    }
+
+    img::after {
+        content: url("https://fakeimg.pl/60x91/");
+        display: block;
+        background: #E5E5E5;
+        width: 60px;
+        height: 91px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
     .description {
         margin-left: 9px;
         display: flex;

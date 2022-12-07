@@ -27,41 +27,42 @@ export default class MovieList extends Component {
             closable
           />
         )}
-        {arr.map((el) => {
-          const {
-            title,
-            id,
-            overview,
-            releaseDate,
-            posterPath,
-            voteAverage,
-            genre,
-            setRating,
-            saveStars,
-            guestId,
-            onError,
-          } = el
-          return (
-            <div className='movie-card' key={id}>
-              <Movie
-                genre={genre}
-                id={id}
-                guestId={guestId}
-                title={title}
-                onError={onError}
-                overview={overview}
-                releaseDate={releaseDate}
-                posterPath={posterPath}
-                voteAverage={voteAverage.toFixed(1)}
-                loading={loading}
-                Paragraph={Paragraph}
-                ellipsis={this.state.ellipsis}
-                setRating={() => setRating(id)}
-                saveStars={saveStars}
-              />
-            </div>
-          )
-        })}
+        {!loading &&
+          arr.map((el) => {
+            const {
+              title,
+              id,
+              overview,
+              releaseDate,
+              posterPath,
+              voteAverage,
+              genre,
+              setRating,
+              saveStars,
+              guestId,
+              onError,
+            } = el
+            return (
+              <div className='movie-card' key={id}>
+                <Movie
+                  genre={genre}
+                  id={id}
+                  guestId={guestId}
+                  title={title}
+                  onError={onError}
+                  overview={overview}
+                  releaseDate={releaseDate}
+                  posterPath={posterPath}
+                  voteAverage={voteAverage.toFixed(1)}
+                  loading={loading}
+                  Paragraph={Paragraph}
+                  ellipsis={this.state.ellipsis}
+                  setRating={() => setRating(id)}
+                  saveStars={saveStars}
+                />
+              </div>
+            )
+          })}
       </div>
     )
   }

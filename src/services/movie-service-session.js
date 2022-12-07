@@ -1,28 +1,6 @@
-export default class MovieService {
+export default class MovieServiceSession {
   apiBase = 'https://api.themoviedb.org/3/'
   apiKey = '5e847ceaa13e81e351a64ec0755ba00e'
-
-  async getResource(url) {
-    let newUrl = new URL(`${url}`, this.apiBase)
-    const res = await fetch(newUrl)
-    if (!res.ok) {
-      throw new Error(`Could not fetch ${url}`) + `, received ${res.status}`
-    }
-    return await res.json()
-  }
-
-  async getMovies(string, number) {
-    let res =
-      string === ''
-        ? await this.getResource(`search/movie?api_key=${this.apiKey}&query=return&page=${number}`)
-        : await this.getResource(`search/movie?api_key=${this.apiKey}&query=${string}&page=${number}`)
-    return res.results
-  }
-
-  async getGenres() {
-    let res = await this.getResource(`genre/movie/list?api_key=${this.apiKey}`)
-    return res.genres
-  }
 
   async getRatedMovies(guestId, page) {
     if (!guestId) throw new Error('Guest session not created')

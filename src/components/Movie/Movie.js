@@ -4,11 +4,11 @@ import { Rate, Progress } from 'antd'
 
 import './Movie.css'
 import { MovieServiceConsumer } from '../MovieServiceContext'
-import MovieService from '../../services/movie-services'
+import MovieServiceSession from '../../services/movie-service-session'
 
 export default class Movie extends Component {
   progress
-  movieService = new MovieService()
+  movieServiceSession = new MovieServiceSession()
 
   state = {
     loading: true,
@@ -23,19 +23,13 @@ export default class Movie extends Component {
   saveStars = (movieId, rateMovie) => {
     const guestId = sessionStorage.getItem('guestId')
     localStorage.setItem(movieId, JSON.stringify(rateMovie))
-    this.movieService.setRated(movieId, rateMovie, guestId).then()
+    this.movieServiceSession.setRated(movieId, rateMovie, guestId).then()
   }
 
   render() {
-    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id, loading } =
-      this.props
+    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id } = this.props
     const defaultRate = localStorage.getItem(id) ? localStorage.getItem(id) : 0
-    let formatDate
-    try {
-      formatDate = format(new Date(releaseDate), 'MMMM dd, yyyy')
-    } catch (error) {
-      error.message
-    }
+    const formatDate = releaseDate ? format(new Date(releaseDate), 'MMMM dd, yyyy') : ''
 
     const genreList = genre.map((item) => (
       <MovieServiceConsumer key={item.toString()}>
@@ -56,7 +50,6 @@ export default class Movie extends Component {
     return (
       <div className='view'>
         <div className='movie-avatar'>
-          {loading && <img src='https://via.placeholder.com/250x200' alt='lock' />}
           <img src={`${posterPath}`} alt='movie' onLoad={this.handleOnLoad} />
         </div>
         <div className='description'>

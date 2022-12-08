@@ -4,19 +4,27 @@ export default class MovieServiceSession {
 
   async getRatedMovies(guestId, page) {
     if (!guestId) throw new Error('Guest session not created')
-    const req = await fetch(`${this.apiBase}guest_session/${guestId}/rated/movies?api_key=${this.apiKey}&page=${page}`)
+    let newUrl = new URL(`guest_session/${guestId}/rated/movies`, this.apiBase)
+    newUrl.searchParams.set('api_key', this.apiKey)
+    newUrl.searchParams.set('page', page)
+    const req = await fetch(newUrl)
     const res = await req.json()
     return res.results
   }
 
   async getGuestSession() {
-    const req = await fetch(`${this.apiBase}authentication/guest_session/new?api_key=${this.apiKey}`)
+    let newUrl = new URL('authentication/guest_session/new', this.apiBase)
+    newUrl.searchParams.set('api_key', this.apiKey)
+    const req = await fetch(newUrl)
     const res = await req.json()
     return res.guest_session_id
   }
 
   async setRated(movieId, rating, guestId) {
-    let req = await fetch(`${this.apiBase}movie/${movieId}/rating?api_key=${this.apiKey}&guest_session_id=${guestId}`, {
+    let newUrl = new URL(`movie/${movieId}/rating`, this.apiBase)
+    newUrl.searchParams.set('api_key', this.apiKey)
+    newUrl.searchParams.set('guest_session_is', guestId)
+    let req = await fetch(newUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

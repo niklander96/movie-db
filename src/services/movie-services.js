@@ -12,41 +12,18 @@ export default class MovieService {
   }
 
   async getMovies(string, number) {
-    let res =
-      string === ''
-        ? await this.getResource(`search/movie?api_key=${this.apiKey}&query=return&page=${number}`)
-        : await this.getResource(`search/movie?api_key=${this.apiKey}&query=${string}&page=${number}`)
+    let newUrl = new URL('search/movie', this.apiBase)
+    newUrl.searchParams.set('api_key', this.apiKey)
+    string === '' ? newUrl.searchParams.set('query', 'return') : newUrl.searchParams.set('query', string)
+    newUrl.searchParams.set('page', number)
+    let res = await this.getResource(newUrl)
     return res.results
   }
 
   async getGenres() {
-    let res = await this.getResource(`genre/movie/list?api_key=${this.apiKey}`)
+    let newUrl = new URL('genre/movie/list', this.apiBase)
+    newUrl.searchParams.set('api_key', this.apiKey)
+    let res = await this.getResource(newUrl)
     return res.genres
-  }
-
-  async getRatedMovies(guestId, page) {
-    if (!guestId) throw new Error('Guest session not created')
-    const req = await fetch(`${this.apiBase}guest_session/${guestId}/rated/movies?api_key=${this.apiKey}&page=${page}`)
-    const res = await req.json()
-    return res.results
-  }
-
-  async getGuestSession() {
-    const req = await fetch(`${this.apiBase}authentication/guest_session/new?api_key=${this.apiKey}`)
-    const res = await req.json()
-    return res.guest_session_id
-  }
-
-  async setRated(movieId, rating, guestId) {
-    let req = await fetch(`${this.apiBase}movie/${movieId}/rating?api_key=${this.apiKey}&guest_session_id=${guestId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify({ value: `${rating}` }),
-    })
-    const res = await req.json()
-    if (!res.success) throw new Error('Failed to rated movie')
-    return res
   }
 }

@@ -18,8 +18,8 @@ export default class App extends Component {
     stars: [],
     loading: false,
     error: false,
-    currentPage: this.page,
     totalPages: 0,
+    currentPage: this.page,
     guestId: localStorage.getItem('guestId'),
     inputValue: 'return',
     isSwitched: false,
@@ -57,7 +57,7 @@ export default class App extends Component {
     this.movieService
       .getMovies(string, number)
       .then((movie) => {
-        const arrM = movie.map((mov) => {
+        const arrM = movie.results.map((mov) => {
           return {
             id: mov.id,
             title: mov.title,
@@ -66,11 +66,11 @@ export default class App extends Component {
             releaseDate: mov.release_date,
             posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
             voteAverage: mov.vote_average,
-            currentPage: mov.page,
           }
         })
+        const pages = movie.total_pages
         this.setState({
-          totalPages: movie.total_pages,
+          totalPages: pages,
           moviesArr: arrM,
           loading: false,
           isSwitched: false,
@@ -209,7 +209,7 @@ export default class App extends Component {
                     <Pagination
                       className='app-pagination'
                       size='small'
-                      total={Number(totalPages) * 10}
+                      total={totalPages * 10}
                       onChange={
                         isSwitched
                           ? (currentPage) => this.updateRatedMovie(guestId, currentPage)

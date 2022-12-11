@@ -29,12 +29,4 @@ export default class MovieService {
     let res = await this.getResource(newUrl)
     return res.genres
   }
-
-  async getTotalPages() {
-    let newUrl = new URL('search/movie', this.apiBase)
-    newUrl.searchParams.set('api_key', this.apiKey)
-    newUrl.searchParams.set('query', 'return')
-    let res = await this.getResource(newUrl)
-    return res.total_pages
-  }
 }

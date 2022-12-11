@@ -19,7 +19,8 @@ export default class App extends Component {
     loading: false,
     error: false,
     currentPage: this.page,
-    guestId: '',
+    totalPages: 0,
+    guestId: localStorage.getItem('guestId'),
     inputValue: 'return',
     isSwitched: false,
   }
@@ -28,11 +29,11 @@ export default class App extends Component {
   movieServiceSession = new MovieServiceSession()
 
   componentDidMount() {
-    const { isSwitched } = this.state
-    this.guestSession()
-    isSwitched
-      ? this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
-      : this.updateMovie(this.state.inputValue, this.state.currentPage)
+    const { isSwitched, currentPage, inputValue, guestId } = this.state
+    if (!guestId) {
+      this.guestSession()
+    }
+    isSwitched ? this.updateRatedMovie(guestId, currentPage) : this.updateMovie(inputValue, currentPage)
     this.getMovieGenres()
     this.setState({
       loading: true,
@@ -69,6 +70,7 @@ export default class App extends Component {
           }
         })
         this.setState({
+          totalPages: movie.total_pages,
           moviesArr: arrM,
           loading: false,
           isSwitched: false,
@@ -112,7 +114,9 @@ export default class App extends Component {
   }, 1000)
 
   guestSession = () => {
-    this.movieServiceSession.getGuestSession().then((guest) => sessionStorage.setItem('guestId', guest))
+    this.movieServiceSession.getGuestSession().then((guest) => {
+      localStorage.setItem('guestId', guest)
+    })
   }
 
   getMovieGenres = () => {
@@ -146,8 +150,9 @@ export default class App extends Component {
       genres,
       guestId,
       isSwitched,
+      currentPage,
+      totalPages,
     } = this.state
-
     const items = [
       {
         label: 'Search',
@@ -174,8 +179,8 @@ export default class App extends Component {
                       size='large'
                       onChange={() =>
                         isSwitched
-                          ? this.updateMovie(this.state.inputValue, this.state.currentPage)
-                          : this.updateRatedMovie(sessionStorage.getItem('guestId'), this.state.currentPage)
+                          ? this.updateMovie(inputValue, currentPage)
+                          : this.updateRatedMovie(guestId, currentPage)
                       }
                       items={items}
                     />
@@ -200,15 +205,14 @@ export default class App extends Component {
                     saveStars={this.saveStars}
                     setRated={this.setRating}
                   />
-
                   <div className='movie-app-footer'>
                     <Pagination
                       className='app-pagination'
                       size='small'
-                      total={5000}
+                      total={Number(totalPages) * 10}
                       onChange={
                         isSwitched
-                          ? (currentPage) => this.updateRatedMovie(sessionStorage.getItem('guestId'), currentPage)
+                          ? (currentPage) => this.updateRatedMovie(guestId, currentPage)
                           : (currentPage) => this.updateMovie(inputValue, currentPage)
                       }
                     />

@@ -5,10 +5,13 @@ export default class MovieService {
   async getResource(url) {
     let newUrl = new URL(`${url}`, this.apiBase)
     const res = await fetch(newUrl)
-    if (!res.ok) {
-      throw new Error(`Could not fetch ${url}`) + `, received ${res.status}`
+    try {
+      if (res.ok) {
+        return await res.json()
+      }
+    } catch (e) {
+      console.error(e)
     }
-    return await res.json()
   }
 
   async getMovies(string, number) {

@@ -10,7 +10,7 @@ export default class MovieList extends Component {
   }
   render() {
     const { Paragraph } = Typography
-    const { loading, moviesArr, isSwitched, moviesArrRate } = this.props
+    const { loading, moviesArr, isSwitched, moviesArrRate, guestId } = this.props
     const arr = isSwitched ? moviesArrRate : moviesArr
     return (
       <div className='movie-list'>
@@ -19,29 +19,20 @@ export default class MovieList extends Component {
             <Alert message='Идёт загрузка' description='Пожалуйста, подождите.' type='info' />
           </Spin>
         )}
-        {moviesArr.length === 0 && (
+        {moviesArr.length === 0 && !loading ? (
           <Alert
             message='Поиск не дал результатов.'
             description='Проверьте правильно ли вы ввели название.'
             type='info'
             closable
           />
+        ) : (
+          ''
         )}
         {!loading &&
           arr.map((el) => {
-            const {
-              title,
-              id,
-              overview,
-              releaseDate,
-              posterPath,
-              voteAverage,
-              genre,
-              setRating,
-              saveStars,
-              guestId,
-              onError,
-            } = el
+            const { title, id, overview, releaseDate, posterPath, voteAverage, genre, setRating, saveStars, onError } =
+              el
             return (
               <div className='movie-card' key={id}>
                 <Movie

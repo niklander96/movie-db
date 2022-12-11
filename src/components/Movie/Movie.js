@@ -10,18 +10,8 @@ export default class Movie extends Component {
   progress
   movieServiceSession = new MovieServiceSession()
 
-  state = {
-    loading: true,
-  }
-
-  handleOnLoad = () => {
-    this.setState({
-      loading: false,
-    })
-  }
-
   saveStars = (movieId, rateMovie) => {
-    const guestId = sessionStorage.getItem('guestId')
+    const guestId = localStorage.getItem('guestId')
     localStorage.setItem(movieId, JSON.stringify(rateMovie))
     this.movieServiceSession.setRated(movieId, rateMovie, guestId).then()
   }
@@ -50,7 +40,7 @@ export default class Movie extends Component {
     return (
       <div className='view'>
         <div className='movie-avatar'>
-          <img src={`${posterPath}`} alt='movie' onLoad={this.handleOnLoad} />
+          <img src={`${posterPath}`} alt='movie' />
         </div>
         <div className='description'>
           <div className='movie-title'>

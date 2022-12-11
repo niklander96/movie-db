@@ -1,1 +1,1 @@
-https://movie-db-eight-kappa.vercel.app/
+https://movie-db-niklander96.vercel.app/

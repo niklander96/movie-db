@@ -30,9 +30,6 @@ export default class App extends Component {
 
   componentDidMount() {
     const { isSwitched, currentPage, inputValue, guestId } = this.state
-    if (!guestId) {
-      this.guestSession()
-    }
     isSwitched ? this.updateRatedMovie(guestId, currentPage) : this.updateMovie(inputValue, currentPage)
     this.getMovieGenres()
     this.setState({
@@ -43,6 +40,9 @@ export default class App extends Component {
   componentDidUpdate(prevState) {
     if (this.state.currentPage === prevState.currentPage) {
       this.updateMovie()
+    }
+    if (!this.state.guestId) {
+      this.guestSession()
     }
   }
 
@@ -209,6 +209,7 @@ export default class App extends Component {
                     <Pagination
                       className='app-pagination'
                       size='small'
+                      defaultCurrent={currentPage}
                       total={totalPages * 10}
                       onChange={
                         isSwitched

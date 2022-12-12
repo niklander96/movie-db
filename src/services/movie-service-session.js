@@ -14,7 +14,7 @@ export default class MovieServiceSession {
       const res = await req.json()
       return res.results
     } catch (e) {
-      console.error()
+      alert(e.message)
     }
   }
 
@@ -42,7 +42,7 @@ export default class MovieServiceSession {
       if (!res.success) throw new Error('Failed to rated movie')
       return res
     } catch (e) {
-      console.error(e)
+      alert(e.message)
     }
   }
 }

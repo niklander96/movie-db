@@ -13,12 +13,13 @@ export default class App extends Component {
   page = 1
   state = {
     moviesArr: [],
-    moviesArrRate: [],
+    moviesArrRate: {},
     genres: [],
     stars: [],
     loading: false,
     error: false,
     totalPages: 0,
+    totalRatedPages: 0,
     currentPage: this.page,
     guestId: localStorage.getItem('guestId'),
     inputValue: 'return',
@@ -29,21 +30,16 @@ export default class App extends Component {
   movieServiceSession = new MovieServiceSession()
 
   componentDidMount() {
-    const { isSwitched, currentPage, inputValue, guestId } = this.state
-    isSwitched ? this.updateRatedMovie(guestId, currentPage) : this.updateMovie(inputValue, currentPage)
+    const { currentPage, inputValue, guestId } = this.state
+    if (!guestId) {
+      this.guestSession()
+      this.updateRatedMovie(currentPage)
+    }
+    this.updateMovie(inputValue, currentPage)
     this.getMovieGenres()
     this.setState({
       loading: true,
     })
-  }
-
-  componentDidUpdate(prevState) {
-    if (this.state.currentPage === prevState.currentPage) {
-      this.updateMovie()
-    }
-    if (!this.state.guestId) {
-      this.guestSession()
-    }
   }
 
   onError = () => {
@@ -79,11 +75,11 @@ export default class App extends Component {
       .catch(() => this.onError)
   }
 
-  updateRatedMovie = (guestId, page) => {
+  updateRatedMovie = (page) => {
     this.movieServiceSession
-      .getRatedMovies(guestId, page)
+      .getRatedMovies(page)
       .then((movie) => {
-        const arrR = movie.map((mov) => {
+        const arrR = movie.results.map((mov) => {
           return {
             id: mov.id,
             title: mov.title,
@@ -92,10 +88,12 @@ export default class App extends Component {
             releaseDate: mov.release_date,
             posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
             voteAverage: mov.vote_average,
-            currentPage: mov.page,
           }
         })
+
+        const pages = movie.total_pages
         this.setState({
+          totalRatedPages: pages,
           moviesArrRate: arrR,
           loading: false,
           isSwitched: true,
@@ -115,7 +113,7 @@ export default class App extends Component {
 
   guestSession = () => {
     this.movieServiceSession.getGuestSession().then((guest) => {
-      localStorage.setItem('guestId', guest)
+      localStorage.setItem('guestId', guest.guest_session_id)
     })
   }
 
@@ -131,6 +129,13 @@ export default class App extends Component {
         genres: genreItems,
       })
     })
+  }
+
+  onSaveRating = (id, rating) => {
+    this.movieServiceSession.setRated(id, rating).then()
+    this.setState((state) => ({
+      moviesArrRate: { ...state.moviesArrRate, [id]: rating },
+    }))
   }
 
   render() {
@@ -152,17 +157,67 @@ export default class App extends Component {
       isSwitched,
       currentPage,
       totalPages,
+      totalRatedPages,
     } = this.state
     const items = [
       {
         label: 'Search',
         key: '1',
-        children: <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />,
+        children: (
+          // <div>
+          <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
+        ),
+        // <MovieList
+        //   genre={genre}
+        //   inputValue={inputValue}
+        //   setValue={this.setValue}
+        //   moviesArr={moviesArr}
+        //   moviesArrRate={moviesArrRate}
+        //   loading={loading}
+        //   id={id}
+        //   isSwitched={isSwitched}
+        //   guestId={guestId}
+        //   title={title}
+        //   onError={this.onError}
+        //   onSaveRating={this.onSaveRating}
+        //   overview={overview}
+        //   releaseDate={releaseDate}
+        //   posterPath={posterPath}
+        //   voteAverage={voteAverage}
+        //   error={error}
+        //   saveStars={this.saveStars}
+        // />
+        //   </div>
+        // ),
       },
       {
         label: 'Rated',
         key: '2',
         children: '',
+        // (
+        //   <div>
+        //     <MovieListRated
+        //       genre={genre}
+        //       inputValue={inputValue}
+        //       setValue={this.setValue}
+        //       moviesArr={moviesArr}
+        //       moviesArrRate={moviesArrRate}
+        //       loading={loading}
+        //       id={id}
+        //       isSwitched={isSwitched}
+        //       guestId={guestId}
+        //       title={title}
+        //       onError={this.onError}
+        //       onSaveRating={this.onSaveRating}
+        //       overview={overview}
+        //       releaseDate={releaseDate}
+        //       posterPath={posterPath}
+        //       voteAverage={voteAverage}
+        //       error={error}
+        //       saveStars={this.saveStars}
+        //     />
+        //   </div>
+        // ),
       },
     ]
     return (
@@ -178,9 +233,7 @@ export default class App extends Component {
                       destroyInactiveTabPane='true'
                       size='large'
                       onChange={() =>
-                        isSwitched
-                          ? this.updateMovie(inputValue, currentPage)
-                          : this.updateRatedMovie(guestId, currentPage)
+                        isSwitched ? this.updateMovie(inputValue, currentPage) : this.updateRatedMovie(currentPage)
                       }
                       items={items}
                     />
@@ -197,23 +250,22 @@ export default class App extends Component {
                     guestId={guestId}
                     title={title}
                     onError={this.onError}
+                    onSaveRating={this.onSaveRating}
                     overview={overview}
                     releaseDate={releaseDate}
                     posterPath={posterPath}
                     voteAverage={voteAverage}
                     error={error}
                     saveStars={this.saveStars}
-                    setRated={this.setRating}
                   />
                   <div className='movie-app-footer'>
                     <Pagination
                       className='app-pagination'
-                      size='small'
                       defaultCurrent={currentPage}
-                      total={totalPages * 10}
+                      total={isSwitched ? totalRatedPages * 10 : totalPages * 10}
                       onChange={
                         isSwitched
-                          ? (currentPage) => this.updateRatedMovie(guestId, currentPage)
+                          ? (currentPage) => this.updateRatedMovie(currentPage)
                           : (currentPage) => this.updateMovie(inputValue, currentPage)
                       }
                     />

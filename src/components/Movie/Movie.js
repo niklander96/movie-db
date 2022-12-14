@@ -4,23 +4,27 @@ import { Rate, Progress } from 'antd'
 
 import './Movie.css'
 import { MovieServiceConsumer } from '../MovieServiceContext'
-import MovieServiceSession from '../../services/movie-service-session'
 
 export default class Movie extends Component {
-  progress
-  movieServiceSession = new MovieServiceSession()
-
-  saveStars = (movieId, rateMovie) => {
-    const guestId = localStorage.getItem('guestId')
-    localStorage.setItem(movieId, JSON.stringify(rateMovie))
-    this.movieServiceSession.setRated(movieId, rateMovie, guestId).then()
-  }
-
   render() {
-    const { title, overview, posterPath, voteAverage, releaseDate, Paragraph, ellipsis, genre, id } = this.props
-    const defaultRate = localStorage.getItem(id) ? localStorage.getItem(id) : 0
+    const {
+      title,
+      overview,
+      posterPath,
+      voteAverage,
+      releaseDate,
+      Paragraph,
+      ellipsis,
+      genre,
+      id,
+      onSaveRating,
+      ratedMovie,
+    } = this.props
     const formatDate = releaseDate ? format(new Date(releaseDate), 'MMMM dd, yyyy') : ''
-
+    const defaultRate = ratedMovie ? ratedMovie : 0
+    const saveStars = (rate) => {
+      onSaveRating(id, rate)
+    }
     const genreList = genre.map((item) => (
       <MovieServiceConsumer key={item.toString()}>
         {(genres) => {
@@ -66,7 +70,7 @@ export default class Movie extends Component {
           <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 3 } : false}>
             {`${overview}`}
           </Paragraph>
-          <Rate defaultValue={defaultRate} count={10} onChange={(rate) => this.saveStars(id, rate)} />
+          <Rate defaultValue={defaultRate} count={10} onChange={saveStars} onSaveRating={onSaveRating} />
         </div>
       </div>
     )

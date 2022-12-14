@@ -10,7 +10,7 @@ export default class MovieList extends Component {
   }
   render() {
     const { Paragraph } = Typography
-    const { loading, moviesArr, isSwitched, moviesArrRate, guestId } = this.props
+    const { loading, moviesArr, moviesArrRate, guestId, onSaveRating, isSwitched } = this.props
     const arr = isSwitched ? moviesArrRate : moviesArr
     return (
       <div className='movie-list'>
@@ -31,8 +31,7 @@ export default class MovieList extends Component {
         )}
         {!loading &&
           arr.map((el) => {
-            const { title, id, overview, releaseDate, posterPath, voteAverage, genre, setRating, saveStars, onError } =
-              el
+            const { title, id, overview, releaseDate, posterPath, voteAverage, genre, onError } = el
             return (
               <div className='movie-card' key={id}>
                 <Movie
@@ -48,8 +47,8 @@ export default class MovieList extends Component {
                   loading={loading}
                   Paragraph={Paragraph}
                   ellipsis={this.state.ellipsis}
-                  setRating={() => setRating(id)}
-                  saveStars={saveStars}
+                  ratedMovie={moviesArrRate[id]}
+                  onSaveRating={onSaveRating}
                 />
               </div>
             )

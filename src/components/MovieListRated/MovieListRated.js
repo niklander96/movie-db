@@ -1,25 +1,28 @@
 import React, { Component } from 'react'
-import { Alert, Spin, Typography } from 'antd'
+import { Alert, Pagination, Spin, Typography } from 'antd'
 
 import Movie from '../Movie'
 import './MovieListRated.css'
 import MovieServiceSession from '../../services/movie-service-session'
 
 export default class MovieListRated extends Component {
+  movieServiceSession = new MovieServiceSession()
   state = {
     ellipsis: true,
     moviesArrRate: [],
-  }
-  movieServiceSession = new MovieServiceSession()
-  componentDidMount() {
-    this.updateRatedMovie(1)
+    loading: true,
+    currentPage: 1,
+    totalRatedPages: 0,
   }
 
-  updateRatedMovie = (page) => {
-    this.movieServiceSession
-      .getRatedMovies(page)
-      .then((movie) => {
-        const arrR = movie.results.map((mov) => {
+  componentDidMount() {
+    this.getRatedMovie(1)
+  }
+
+  getRatedMovie = (page) => {
+    this.movieServiceSession.getRatedMovies(page).then((movie) => {
+      this.setState({
+        moviesArrRate: movie.results.map((mov) => {
           return {
             id: mov.id,
             title: mov.title,
@@ -29,23 +32,24 @@ export default class MovieListRated extends Component {
             posterPath: `https://image.tmdb.org/t/p/original${mov.poster_path}`,
             voteAverage: mov.vote_average,
           }
-        })
-
-        const pages = movie.total_pages
-        this.setState({
-          totalRatedPages: pages,
-          moviesArrRate: arrR,
-          loading: false,
-          isSwitched: true,
-        })
+        }),
+        totalRatedPages: movie.total_pages,
+        loading: false,
       })
-      .catch(() => this.onError)
+    })
   }
+
+  changePage = (page) => {
+    this.setState({ currentPage: page, loading: true })
+    this.getRatedMovie(page)
+  }
+
   render() {
     const { Paragraph } = Typography
-    const { loading, moviesArrRate, guestId, onSaveRating } = this.props
+    const { loading, currentPage, totalRatedPages, moviesArrRate, ellipsis } = this.state
+    const { guestId, onSaveRating, moviesArrRateId } = this.props
     const movieRatedCards = (
-      <div className='movie-card'>
+      <div className='movie-list'>
         {moviesArrRate.map(({ title, id, overview, releaseDate, posterPath, voteAverage, genre, onError }) => (
           <Movie
             key={id}
@@ -60,21 +64,28 @@ export default class MovieListRated extends Component {
             voteAverage={voteAverage.toFixed(1)}
             loading={loading}
             Paragraph={Paragraph}
-            ellipsis={this.state.ellipsis}
-            ratedMovie={moviesArrRate[id]}
+            ellipsis={ellipsis}
+            ratedMovie={moviesArrRateId[id]}
             onSaveRating={onSaveRating}
           />
         ))}
+        {!loading && moviesArrRate.length !== 0 && (
+          <div className='app-pagination'>
+            <Pagination pageSize='20' current={currentPage} total={totalRatedPages * 10} onChange={this.changePage} />
+          </div>
+        )}
       </div>
     )
     return (
       <div className='movie-list'>
-        {loading && (
+        {}
+        {loading ? (
           <Spin tip='Loading...'>
             <Alert message='Идёт загрузка' description='Пожалуйста, подождите.' type='info' />
           </Spin>
+        ) : (
+          moviesArrRate.length > 0 && movieRatedCards
         )}
-        {!loading && movieRatedCards}
       </div>
     )
   }

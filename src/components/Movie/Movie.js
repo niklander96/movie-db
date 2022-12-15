@@ -20,8 +20,8 @@ export default class Movie extends Component {
       onSaveRating,
       ratedMovie,
     } = this.props
+    console.log(ratedMovie)
     const formatDate = releaseDate ? format(new Date(releaseDate), 'MMMM dd, yyyy') : ''
-    const defaultRate = ratedMovie ? ratedMovie : 0
     const saveStars = (rate) => {
       onSaveRating(id, rate)
     }
@@ -70,7 +70,7 @@ export default class Movie extends Component {
           <Paragraph className='movie-description' ellipsis={ellipsis ? { rows: 3 } : false}>
             {`${overview}`}
           </Paragraph>
-          <Rate defaultValue={defaultRate} count={10} onChange={saveStars} onSaveRating={onSaveRating} />
+          <Rate value={ratedMovie} count={10} onChange={saveStars} onSaveRating={onSaveRating} />
         </div>
       </div>
     )

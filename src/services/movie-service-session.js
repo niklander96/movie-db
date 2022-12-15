@@ -12,7 +12,7 @@ export default class MovieServiceSession {
         throw new Error('Guest session not created')
       }
       const req = await fetch(newUrl)
-      return await req.json()
+      return req.json()
     } catch (e) {
       alert(e.message)
     }

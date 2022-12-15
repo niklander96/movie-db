@@ -30,16 +30,22 @@ export default class App extends Component {
   movieServiceSession = new MovieServiceSession()
 
   componentDidMount() {
-    const { currentPage, inputValue, guestId } = this.state
-    if (!guestId) {
-      this.guestSession()
-      this.updateRatedMovie(currentPage)
+    const { currentPage, inputValue, guestId, isSwitched } = this.state
+    !guestId &&
+      this.movieServiceSession
+        .getGuestSession()
+        .then((guest) => {
+          localStorage.setItem('guestId', guest.guest_session_id)
+        })
+        .then(() => this.getRatedMovies())
+    if (guestId) {
+      isSwitched ? this.updateRatedMovie(currentPage) : this.updateMovie(inputValue, currentPage)
+      this.getRatedMovies()
+      this.getMovieGenres()
+      this.setState({
+        loading: true,
+      })
     }
-    this.updateMovie(inputValue, currentPage)
-    this.getMovieGenres()
-    this.setState({
-      loading: true,
-    })
   }
 
   onError = () => {
@@ -73,6 +79,28 @@ export default class App extends Component {
         })
       })
       .catch(() => this.onError)
+  }
+
+  getRatedMovies = () => {
+    this.movieServiceSession
+      .getRatedMovies(1)
+      .then((res) => res.total_pages)
+      .then((pages) => {
+        const allMovies = []
+
+        for (let i = 1; i <= pages; i += 1) {
+          allMovies.push(this.movieServiceSession.getRatedMovies(i))
+        }
+
+        Promise.all(allMovies).then((res) => {
+          this.setState({
+            moviesArrRate: res
+              .reduce((acc, page) => [...acc, ...page.results], [])
+              .map((movie) => ({ [movie.id]: movie.rating }))
+              .reduce((acc, obj) => ({ ...acc, [Object.keys(obj)[0]]: obj[Object.keys(obj)[0]] }), {}),
+          })
+        })
+      })
   }
 
   updateRatedMovie = (page) => {
@@ -111,11 +139,11 @@ export default class App extends Component {
     })
   }, 1000)
 
-  guestSession = () => {
-    this.movieServiceSession.getGuestSession().then((guest) => {
-      localStorage.setItem('guestId', guest.guest_session_id)
-    })
-  }
+  // guestSession = () => {
+  //   this.movieServiceSession.getGuestSession().then((guest) => {
+  //     localStorage.setItem('guestId', guest.guest_session_id)
+  //   })
+  // }
 
   getMovieGenres = () => {
     this.movieService.getGenres().then((genre) => {
@@ -163,61 +191,12 @@ export default class App extends Component {
       {
         label: 'Search',
         key: '1',
-        children: (
-          // <div>
-          <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />
-        ),
-        // <MovieList
-        //   genre={genre}
-        //   inputValue={inputValue}
-        //   setValue={this.setValue}
-        //   moviesArr={moviesArr}
-        //   moviesArrRate={moviesArrRate}
-        //   loading={loading}
-        //   id={id}
-        //   isSwitched={isSwitched}
-        //   guestId={guestId}
-        //   title={title}
-        //   onError={this.onError}
-        //   onSaveRating={this.onSaveRating}
-        //   overview={overview}
-        //   releaseDate={releaseDate}
-        //   posterPath={posterPath}
-        //   voteAverage={voteAverage}
-        //   error={error}
-        //   saveStars={this.saveStars}
-        // />
-        //   </div>
-        // ),
+        children: <Input placeholder='Type to search...' onChange={(e) => this.setValue(e)} autoFocus />,
       },
       {
         label: 'Rated',
         key: '2',
         children: '',
-        // (
-        //   <div>
-        //     <MovieListRated
-        //       genre={genre}
-        //       inputValue={inputValue}
-        //       setValue={this.setValue}
-        //       moviesArr={moviesArr}
-        //       moviesArrRate={moviesArrRate}
-        //       loading={loading}
-        //       id={id}
-        //       isSwitched={isSwitched}
-        //       guestId={guestId}
-        //       title={title}
-        //       onError={this.onError}
-        //       onSaveRating={this.onSaveRating}
-        //       overview={overview}
-        //       releaseDate={releaseDate}
-        //       posterPath={posterPath}
-        //       voteAverage={voteAverage}
-        //       error={error}
-        //       saveStars={this.saveStars}
-        //     />
-        //   </div>
-        // ),
       },
     ]
     return (

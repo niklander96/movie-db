@@ -69,22 +69,31 @@ export default class MovieListRated extends Component {
             onSaveRating={onSaveRating}
           />
         ))}
-        {!loading && moviesArrRate.length !== 0 && (
-          <div className='app-pagination'>
-            <Pagination pageSize='20' current={currentPage} total={totalRatedPages * 10} onChange={this.changePage} />
-          </div>
-        )}
       </div>
     )
     return (
-      <div className='movie-list'>
-        {}
+      <div>
+        {!loading && moviesArrRate.length === 0 && (
+          <Alert
+            message='Нет оцененных фильмов.'
+            description='Проверьте, оценили ли вы какой-нибудь фильм.'
+            type='info'
+            closable
+          />
+        )}
         {loading ? (
           <Spin tip='Loading...'>
             <Alert message='Идёт загрузка' description='Пожалуйста, подождите.' type='info' />
           </Spin>
         ) : (
-          moviesArrRate.length > 0 && movieRatedCards
+          moviesArrRate.length !== 0 && (
+            <div className='movie-list'>
+              {movieRatedCards}
+              <div className='movie-pagination'>
+                <Pagination current={currentPage} total={totalRatedPages * 10} onChange={this.changePage} />
+              </div>
+            </div>
+          )
         )}
       </div>
     )

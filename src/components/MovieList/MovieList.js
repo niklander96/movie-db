@@ -15,18 +15,8 @@ export default class MovieList extends Component {
 
   render() {
     const { Paragraph } = Typography
-    const {
-      moviesArr,
-      currentPage,
-      totalPages,
-      loading,
-      onError,
-      onSaveRating,
-      inputValue,
-      moviesArrRate,
-      updateMovie,
-      error,
-    } = this.props
+    const { moviesArr, currentPage, totalPages, loading, onSaveRating, inputValue, moviesArrRate, updateMovie, error } =
+      this.props
     const movieAndPagination = moviesArr.map(
       ({ loading, guestId, genre, id, title, overview, releaseDate, posterPath, voteAverage }) => (
         <Movie
@@ -35,7 +25,6 @@ export default class MovieList extends Component {
           key={id}
           guestId={guestId}
           title={title}
-          onError={onError}
           overview={overview}
           releaseDate={releaseDate}
           posterPath={posterPath}
@@ -51,8 +40,8 @@ export default class MovieList extends Component {
     )
 
     return (
-      <div className='movie-list'>
-        {moviesArr.length === 0 && (
+      <div>
+        {!loading && !error && moviesArr.length === 0 && (
           <Alert
             message='Поиск не дал результатов.'
             description='Проверьте правильно ли вы ввели название.'
@@ -60,22 +49,25 @@ export default class MovieList extends Component {
             closable
           />
         )}
-        {loading ? (
+        {loading && !error ? (
           <Spin tip='Loading...'>
             <Alert message='Идёт загрузка' description='Пожалуйста, подождите.' type='info' />
           </Spin>
         ) : (
-          !error && moviesArr.length !== 0 && movieAndPagination
-        )}
-        {!error && (
-          <div className='movie-pagination'>
-            <Pagination
-              className='app-pagination'
-              defaultCurrent={currentPage}
-              total={totalPages * 10}
-              onChange={(currentPage) => updateMovie(inputValue, currentPage)}
-            />
-          </div>
+          !error &&
+          moviesArr.length !== 0 && (
+            <div className='movie-list'>
+              {movieAndPagination}
+              <div className='movie-pagination'>
+                <Pagination
+                  showSizeChanger={false}
+                  defaultCurrent={currentPage}
+                  total={totalPages * 10}
+                  onChange={(currentPage) => updateMovie(inputValue, currentPage)}
+                />
+              </div>
+            </div>
+          )
         )}
       </div>
     )

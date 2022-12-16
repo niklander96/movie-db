@@ -17,7 +17,7 @@ export default class App extends Component {
     moviesArrRate: {},
     genres: [],
     stars: [],
-    loading: false,
+    loading: true,
     error: false,
     totalPages: 0,
     totalRatedPages: 0,

@@ -20,7 +20,6 @@ export default class Movie extends Component {
       onSaveRating,
       ratedMovie,
     } = this.props
-    console.log(ratedMovie)
     const formatDate = releaseDate ? format(new Date(releaseDate), 'MMMM dd, yyyy') : ''
     const saveStars = (rate) => {
       onSaveRating(id, rate)

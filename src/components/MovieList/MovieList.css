@@ -1,8 +1,8 @@
-.movie-list  {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+.movie-list {
+    display: block;
+    flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 10px;
 }
 
 .movie-list-rated {
